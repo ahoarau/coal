@@ -131,6 +131,7 @@ if(COAL_BUILD_TESTS)
 endif()
 
 add_library(coal)
+target_compile_features(coal PUBLIC cxx_std_17)
 
 target_compile_definitions(
   coal

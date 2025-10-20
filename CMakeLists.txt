@@ -1,155 +1,86 @@
 #
-# Software License Agreement (BSD License)
+# Copyright (c) 2022-2026 INRIA
 #
-# Copyright (c) 2014-2025 CNRS-LAAS, INRIA Author: Florent Lamiraux, Joseph
-# Mirabel All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#
-# * Redistributions of source code must retain the above copyright notice, this
-#   list of conditions and the following disclaimer.
-# * Redistributions in binary form must reproduce the above copyright notice,
-#   this list of conditions and the following disclaimer in the documentation
-#   and/or other materials provided with the distribution.
-# * Neither the name of CNRS-LAAS. nor the names of its contributors may be used
-#   to endorse or promote products derived from this software without specific
-#   prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+cmake_minimum_required(VERSION 3.22...4.1)
 
-cmake_minimum_required(VERSION 3.22)
-set(CXX_DISABLE_WERROR TRUE)
-
-set(PROJECT_NAME coal)
-set(PROJECT_ORG "coal-library")
-set(
-  PROJECT_DESCRIPTION
-  "Coal, The Collision Detection Library. Previously known as HPP-FCL, fork of FCL -- The Flexible Collision Library"
+include(FetchContent)
+FetchContent_Declare(
+  cmake-utils
+  GIT_REPOSITORY https://github.com/ahoarau/cmake-utils.git
+  GIT_TAG main
 )
-set(PROJECT_URL "https://github.com/coal-library/coal")
-if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
-  set(PROJECT_USE_CMAKE_EXPORT TRUE)
-endif()
-set(PROJECT_COMPATIBILITY_VERSION AnyNewerVersion)
-# To enable jrl-cmakemodules compatibility with workspace we must define the two
-# following lines
-set(PROJECT_AUTO_RUN_FINALIZE FALSE)
-set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
+FetchContent_MakeAvailable(cmake-utils)
 
-set(PROJECT_USE_KEYWORD_LINK_LIBRARIES TRUE)
-set(DOXYGEN_USE_TEMPLATE_CSS TRUE)
+project(
+  coal
+  VERSION 3.0.2
+  DESCRIPTION
+    "Coal, The Collision Detection Library. Previously known as HPP-FCL, fork of FCL -- The Flexible Collision Library"
+  HOMEPAGE_URL "https://github.com/coal-library/coal"
+)
+
+xxx_include_ctest()
+include(CMakeDependentOption)
+xxx_configure_default_build_type(Release)
+xxx_configure_default_install_prefix(${CMAKE_CURRENT_BINARY_DIR}/tmp-install)
+xxx_configure_default_binary_dirs()
+xxx_configure_default_install_dirs()
 
 # ----------------------------------------------------
 # --- OPTIONS  ---------------------------------------
-# Need to be set before including base.cmake
 # ----------------------------------------------------
-option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
-option(SUFFIX_SO_VERSION "Suffix library name with its version" OFF)
-option(
+xxx_option(COAL_BUILD_DOCUMENTATION "Build the documentation" OFF)
+xxx_option(COAL_INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
+cmake_dependent_option(
+  COAL_BUILD_DOCUMENTATION
+  "Build the documentation"
+  OFF
+  COAL_INSTALL_DOCUMENTATION
+  OFF
+)
+
+xxx_option(COAL_BUILD_TESTS "Build the tests" OFF)
+xxx_option(SUFFIX_SO_VERSION "Suffix library name with its version" OFF)
+xxx_option(
   COAL_TURN_ASSERT_INTO_EXCEPTION
   "Turn some critical Coal asserts to exception."
-  FALSE
+  OFF
 )
-option(
-  COAL_ENABLE_LOGGING
+xxx_option(
+  COAL_BUILD_WITH_LOGGING
   "Activate logging for warnings or error messages. Turned on by default in Debug."
-  FALSE
+  OFF
 )
-option(
+xxx_option(
   COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL
   "Make Coal retro-compatible with HPP-FCL."
-  FALSE
+  OFF
 )
-option(
+xxx_option(
   COAL_USE_FLOAT_PRECISION
   "Use float precision (32-bit) instead of the default double precision (64-bit)"
-  FALSE
+  OFF
 )
-option(
+xxx_option(
   COAL_BUILD_WITH_TRACY
   "Build with tracy profiler for performance analysis"
-  FALSE
+  OFF
 )
-
-# Check if the submodule cmake have been initialized
-set(JRL_CMAKE_MODULES "${CMAKE_CURRENT_LIST_DIR}/cmake")
-if(EXISTS "${JRL_CMAKE_MODULES}/base.cmake")
-  message(STATUS "JRL cmakemodules found in 'cmake/' git submodule")
-else()
-  find_package(jrl-cmakemodules QUIET CONFIG)
-  if(jrl-cmakemodules_FOUND)
-    get_property(
-      JRL_CMAKE_MODULES
-      TARGET jrl-cmakemodules::jrl-cmakemodules
-      PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-    )
-    message(STATUS "JRL cmakemodules found on system at ${JRL_CMAKE_MODULES}")
-  else()
-    message(STATUS "JRL cmakemodules not found. Let's fetch it.")
-    include(FetchContent)
-    FetchContent_Declare(
-      "jrl-cmakemodules"
-      GIT_REPOSITORY "https://github.com/jrl-umi3218/jrl-cmakemodules.git"
-    )
-    FetchContent_MakeAvailable("jrl-cmakemodules")
-    FetchContent_GetProperties("jrl-cmakemodules" SOURCE_DIR JRL_CMAKE_MODULES)
-  endif()
-endif()
-
-# Use BoostConfig module distributed by boost library instead of using FindBoost
-# module distributed by CMake. There is one unresolved issue with FindBoost and
-# clang-cl so we deactivate it in this case.
-if(NOT WIN32 OR NOT ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-  if(POLICY CMP0167)
-    cmake_policy(SET CMP0167 NEW)
-    # Set a default value to this policy to avoid issue with find_dependency
-    # macro redefinition with different policy in some modules.
-    set(CMAKE_POLICY_DEFAULT_CMP0167 NEW)
-  endif()
-endif()
-
-include("${JRL_CMAKE_MODULES}/base.cmake")
-COMPUTE_PROJECT_ARGS(PROJECT_ARGS LANGUAGES CXX)
-project(${PROJECT_NAME} ${PROJECT_ARGS})
-
-include("${JRL_CMAKE_MODULES}/boost.cmake")
-include("${JRL_CMAKE_MODULES}/python.cmake")
-include("${JRL_CMAKE_MODULES}/apple.cmake")
-include("${JRL_CMAKE_MODULES}/ide.cmake")
-include("${JRL_CMAKE_MODULES}/tracy.cmake")
-include(CMakeDependentOption)
-
-set(
-  CMAKE_MODULE_PATH
-  ${JRL_CMAKE_MODULES}/find-external/assimp/
-  ${CMAKE_MODULE_PATH}
+xxx_option(
+  COAL_BUILD_WITH_OCTOMAP
+  "Build with Octomap support"
+  OFF
 )
-
-function(set_standard_output_directory target)
-  set_target_properties(
-    ${target}
-    PROPERTIES
-      RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin
-      LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-      ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib
-  )
-endfunction()
-
-SET_DEFAULT_CMAKE_BUILD_TYPE("RelWithDebInfo")
-
-# If needed, fix CMake policy for APPLE systems
-APPLY_DEFAULT_APPLE_CONFIGURATION()
-
+xxx_option(
+  COAL_BUILD_WITH_ASSIMP
+  "Build with Assimp support"
+  OFF
+)
+xxx_option(
+  COAL_BUILD_WITH_QHULL
+  "Build with QHull support"
+  OFF
+)
 cmake_dependent_option(
   COAL_PYTHON_NANOBIND
   "Build the nanobind-based bindings."
@@ -157,7 +88,6 @@ cmake_dependent_option(
   BUILD_PYTHON_INTERFACE
   OFF
 )
-# Stubs only optional for legacy Boost.Python bindings
 if(NOT COAL_PYTHON_NANOBIND)
   cmake_dependent_option(
     GENERATE_PYTHON_STUBS
@@ -168,54 +98,202 @@ if(NOT COAL_PYTHON_NANOBIND)
   )
 endif()
 
-ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.0")
+# ----------------------------------------------------
+# --- Dependencies  ----------------------------------
+# ----------------------------------------------------
 
-# -- tracy profiling (optional)
+xxx_find_package(Eigen3 3.4.0 CONFIG REQUIRED)
+
+xxx_find_package(Boost CONFIG REQUIRED COMPONENTS serialization filesystem)
+
+if(COAL_BUILD_WITH_LOGGING)
+  xxx_find_package(Boost CONFIG REQUIRED COMPONENTS log)
+endif()
+
 if(COAL_BUILD_WITH_TRACY)
-  # assume it is installed somewhere
-  ADD_PROJECT_DEPENDENCY(Tracy REQUIRED)
-  set_target_properties(
-    Tracy::TracyClient
-    PROPERTIES POSITION_INDEPENDENT_CODE True
-  )
-endif(COAL_BUILD_WITH_TRACY)
-
-# Required dependencies
-SET_BOOST_DEFAULT_OPTIONS()
-EXPORT_BOOST_DEFAULT_OPTIONS()
-ADD_PROJECT_DEPENDENCY(Boost REQUIRED serialization filesystem)
-if(COAL_ENABLE_LOGGING)
-  ADD_PROJECT_DEPENDENCY(Boost REQUIRED log)
+  xxx_find_package(Tracy CONFIG REQUIRED)
 endif()
 
-if(Boost_VERSION_STRING VERSION_LESS 1.81)
-  # Default C++ version should be C++11
-  CHECK_MINIMAL_CXX_STANDARD(11 ENFORCE)
-else()
-  # Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)
-  CHECK_MINIMAL_CXX_STANDARD(14 ENFORCE)
+if(COAL_BUILD_WITH_ASSIMP)
+  xxx_find_package(assimp CONFIG REQUIRED)
 endif()
 
-# Optional dependencies
-ADD_PROJECT_DEPENDENCY(octomap 1.8.0 PKG_CONFIG_REQUIRES "octomap >= 1.8")
-if(octomap_FOUND)
-  set(COAL_HAS_OCTOMAP TRUE)
-  string(REPLACE "." ";" VERSION_LIST ${octomap_VERSION})
-  list(GET VERSION_LIST 0 OCTOMAP_MAJOR_VERSION)
-  list(GET VERSION_LIST 1 OCTOMAP_MINOR_VERSION)
-  list(GET VERSION_LIST 2 OCTOMAP_PATCH_VERSION)
-  message(STATUS "COAL uses Octomap")
-else()
-  set(COAL_HAS_OCTOMAP FALSE)
-  message(STATUS "COAL does not use Octomap")
+if(COAL_BUILD_WITH_OCTOMAP)
+  xxx_find_package(octomap 1.8.0 CONFIG REQUIRED)
 endif()
 
-option(COAL_HAS_QHULL "use qhull library to compute convex hulls." FALSE)
-if(COAL_HAS_QHULL)
-  find_package(Qhull REQUIRED COMPONENTS qhull_r qhullcpp)
+if(COAL_BUILD_WITH_QHULL)
+  xxx_find_package(Qhull CONFIG REQUIRED COMPONENTS qhull_r qhullcpp)
 endif()
 
-find_package(assimp REQUIRED)
+if(COAL_BUILD_TESTS)
+  xxx_find_package(Boost CONFIG REQUIRED COMPONENTS unit_test_framework)
+endif()
+
+add_library(coal)
+
+target_compile_definitions(
+  coal
+  PUBLIC
+    $<$<BOOL:${COAL_USE_FLOAT_PRECISION}>:COAL_USE_FLOAT_PRECISION>
+    $<$<BOOL:${COAL_TURN_ASSERT_INTO_EXCEPTION}>:COAL_TURN_ASSERT_INTO_EXCEPTION>
+    $<$<BOOL:${COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL}>:COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL>
+    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:COAL_HAS_ASSIMP>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:COAL_HAS_OCTOMAP>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
+    $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
+)
+
+if(COAL_BUILD_WITH_TRACY)
+  target_compile_definitions(coal PUBLIC COAL_TRACY_ENABLE)
+  target_link_libraries(coal PUBLIC Tracy::TracyClient)
+endif()
+
+target_sources(
+  coal
+  PRIVATE
+    src/collision.cpp
+    src/contact_patch.cpp
+    src/contact_patch/contact_patch_solver.cpp
+    src/contact_patch_func_matrix.cpp
+    src/distance_func_matrix.cpp
+    src/collision_data.cpp
+    src/collision_node.cpp
+    src/collision_object.cpp
+    src/BV/RSS.cpp
+    src/BV/AABB.cpp
+    src/BV/kIOS.cpp
+    src/BV/kDOP.cpp
+    src/BV/OBBRSS.cpp
+    src/BV/OBB.cpp
+    src/broadphase/default_broadphase_callbacks.cpp
+    src/broadphase/broadphase_dynamic_AABB_tree.cpp
+    src/broadphase/broadphase_dynamic_AABB_tree_array.cpp
+    src/broadphase/broadphase_bruteforce.cpp
+    src/broadphase/broadphase_collision_manager.cpp
+    src/broadphase/broadphase_SaP.cpp
+    src/broadphase/broadphase_SSaP.cpp
+    src/broadphase/broadphase_interval_tree.cpp
+    src/broadphase/detail/interval_tree.cpp
+    src/broadphase/detail/interval_tree_node.cpp
+    src/broadphase/detail/simple_interval.cpp
+    src/broadphase/detail/spatial_hash.cpp
+    src/broadphase/detail/morton.cpp
+    src/narrowphase/gjk.cpp
+    src/narrowphase/minkowski_difference.cpp
+    src/narrowphase/support_functions.cpp
+    src/narrowphase/details.h
+    src/shape/geometric_shapes.cpp
+    src/shape/geometric_shapes_utility.cpp
+    src/distance/box_halfspace.cpp
+    src/distance/box_plane.cpp
+    src/distance/box_sphere.cpp
+    src/distance/capsule_capsule.cpp
+    src/distance/capsule_halfspace.cpp
+    src/distance/capsule_plane.cpp
+    src/distance/cone_halfspace.cpp
+    src/distance/cone_plane.cpp
+    src/distance/cylinder_halfspace.cpp
+    src/distance/cylinder_plane.cpp
+    src/distance/sphere_sphere.cpp
+    src/distance/sphere_cylinder.cpp
+    src/distance/sphere_halfspace.cpp
+    src/distance/sphere_plane.cpp
+    src/distance/sphere_capsule.cpp
+    src/distance/ellipsoid_halfspace.cpp
+    src/distance/ellipsoid_plane.cpp
+    src/distance/convex_halfspace.cpp
+    src/distance/convex_plane.cpp
+    src/distance/triangle_halfspace.cpp
+    src/distance/triangle_plane.cpp
+    src/distance/triangle_triangle.cpp
+    src/distance/triangle_sphere.cpp
+    src/distance/halfspace_plane.cpp
+    src/distance/plane_plane.cpp
+    src/distance/halfspace_halfspace.cpp
+    src/intersect.cpp
+    src/math/transform.cpp
+    src/traversal/traversal_recurse.cpp
+    src/distance.cpp
+    src/BVH/BVH_utility.cpp
+    src/BVH/BV_fitter.cpp
+    src/BVH/BVH_model.cpp
+    src/BVH/BV_splitter.cpp
+    src/collision_func_matrix.cpp
+    src/collision_utility.cpp
+    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:src/mesh_loader/assimp.cpp>
+    src/mesh_loader/loader.cpp
+    src/hfield.cpp
+    src/serialization/serialization.cpp
+)
+target_include_directories(
+  coal
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_link_libraries(
+  coal
+  PUBLIC
+    Eigen3::Eigen
+    Boost::serialization Boost::filesystem
+    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
+    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:assimp::assimp>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
+)
+xxx_target_generate_config_header(coal PUBLIC)
+
+return()
+
+# ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.0")
+
+# # -- tracy profiling (optional)
+# if(COAL_BUILD_WITH_TRACY)
+#   # assume it is installed somewhere
+#   ADD_PROJECT_DEPENDENCY(Tracy REQUIRED)
+#   set_target_properties(
+#     Tracy::TracyClient
+#     PROPERTIES POSITION_INDEPENDENT_CODE True
+#   )
+# endif(COAL_BUILD_WITH_TRACY)
+
+# # Required dependencies
+# SET_BOOST_DEFAULT_OPTIONS()
+# EXPORT_BOOST_DEFAULT_OPTIONS()
+# ADD_PROJECT_DEPENDENCY(Boost REQUIRED serialization filesystem)
+# if(COAL_BUILD_WITH_LOGGING)
+#   ADD_PROJECT_DEPENDENCY(Boost REQUIRED log)
+# endif()
+
+# if(Boost_VERSION_STRING VERSION_LESS 1.81)
+#   # Default C++ version should be C++11
+#   CHECK_MINIMAL_CXX_STANDARD(11 ENFORCE)
+# else()
+#   # Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)
+#   CHECK_MINIMAL_CXX_STANDARD(14 ENFORCE)
+# endif()
+
+# # Optional dependencies
+# ADD_PROJECT_DEPENDENCY(octomap 1.8.0 PKG_CONFIG_REQUIRES "octomap >= 1.8")
+# if(octomap_FOUND)
+#   set(COAL_HAS_OCTOMAP TRUE)
+#   string(REPLACE "." ";" VERSION_LIST ${octomap_VERSION})
+#   list(GET VERSION_LIST 0 OCTOMAP_MAJOR_VERSION)
+#   list(GET VERSION_LIST 1 OCTOMAP_MINOR_VERSION)
+#   list(GET VERSION_LIST 2 OCTOMAP_PATCH_VERSION)
+#   message(STATUS "COAL uses Octomap")
+# else()
+#   set(COAL_HAS_OCTOMAP FALSE)
+#   message(STATUS "COAL does not use Octomap")
+# endif()
+
+# option(COAL_HAS_QHULL "use qhull library to compute convex hulls." FALSE)
+# if(COAL_HAS_QHULL)
+#   find_package(Qhull REQUIRED COMPONENTS qhull_r qhullcpp)
+# endif()
+
+# find_package(assimp REQUIRED)
 
 set(
   ${PROJECT_NAME}_HEADERS
@@ -480,14 +558,14 @@ if(
   )
   list(APPEND ${PROJECT_NAME}_HEADERS ${HPP_FCL_BACKWARD_COMPATIBILITY_HEADERS})
   if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
-    HEADER_INSTALL(
+    header_install(
       COMPONENT hpp-fcl-compatibility
       ${HPP_FCL_BACKWARD_COMPATIBILITY_HEADERS}
     )
   endif()
 endif()
 
-if(COAL_HAS_OCTOMAP)
+if(COAL_BUILD_WITH_OCTOMAP)
   list(
     APPEND
     ${PROJECT_NAME}_HEADERS
@@ -495,15 +573,19 @@ if(COAL_HAS_OCTOMAP)
     include/coal/serialization/octree.h
     include/coal/internal/traversal_node_octree.h
   )
-endif(COAL_HAS_OCTOMAP)
+endif()
 
-add_subdirectory(doc)
+if(COAL_BUILD_DOCUMENTATION)
+  add_subdirectory(doc)
+endif()
+
 if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
   add_subdirectory(src)
 endif()
+
 if(BUILD_PYTHON_INTERFACE)
   if(BUILD_STANDALONE_PYTHON_INTERFACE)
-    ADD_PROJECT_DEPENDENCY(${PROJECT_NAME} REQUIRED CONFIG)
+    add_project_dependency(${PROJECT_NAME} REQUIRED CONFIG)
   endif()
   add_custom_target(${PROJECT_NAME}_python)
   set_target_properties(
@@ -518,42 +600,13 @@ if(BUILD_PYTHON_INTERFACE)
     add_subdirectory(python-nb)
   else()
     set(PYTHON_COMPONENTS Interpreter Development NumPy)
-    FINDPYTHON(REQUIRED)
-    ADD_PROJECT_PRIVATE_DEPENDENCY(eigenpy 2.9.2 REQUIRED)
+    findpython(REQUIRED)
+    add_project_private_dependency(eigenpy 2.9.2 REQUIRED)
     add_subdirectory(python)
   endif()
 endif()
-if(BUILD_TESTING)
+
+if(COAL_BUILD_TESTS)
+  enable_testing()
   add_subdirectory(test)
-endif(BUILD_TESTING)
-
-PKG_CONFIG_APPEND_LIBS("coal")
-if(COAL_HAS_OCTOMAP)
-  # FCL_HAVE_OCTOMAP kept for backward compatibility reasons.
-  PKG_CONFIG_APPEND_CFLAGS(
-    "-DCOAL_HAS_OCTOMAP -DCOAL_HAVE_OCTOMAP -DFCL_HAVE_OCTOMAP -DOCTOMAP_MAJOR_VERSION=${OCTOMAP_MAJOR_VERSION} -DOCTOMAP_MINOR_VERSION=${OCTOMAP_MINOR_VERSION} -DOCTOMAP_PATCH_VERSION=${OCTOMAP_PATCH_VERSION}"
-  )
-endif(COAL_HAS_OCTOMAP)
-
-if(
-  COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL
-  AND NOT BUILD_STANDALONE_PYTHON_INTERFACE
-)
-  include(CMakePackageConfigHelpers)
-  write_basic_package_version_file(
-    hpp-fclConfigVersion.cmake
-    VERSION 3.0.0
-    COMPATIBILITY AnyNewerVersion
-  )
-  install(
-    FILES
-      hpp-fclConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/hpp-fclConfigVersion.cmake
-    DESTINATION lib/cmake/hpp-fcl
-    COMPONENT hpp-fcl-compatibility
-  )
-  include("${JRL_CMAKE_MODULES}/install-helpers.cmake")
-  ADD_INSTALL_TARGET(NAME hpp-fcl-compatibility COMPONENT hpp-fcl-compatibility)
 endif()
-
-SETUP_PROJECT_FINALIZE()

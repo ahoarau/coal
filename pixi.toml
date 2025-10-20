@@ -106,16 +106,19 @@ configure = { cmd = [
   ".",
   # Don't use standard layout because it's not well implemented on Windows
   "-DPYTHON_STANDARD_LAYOUT=OFF",
+  "--profiling-output=cmake-profiling.json",
+  "--profiling-format=google-trace",
   "-DPython_EXECUTABLE=$PYTHON_EXECUTABLE",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
   "-DCMAKE_BUILD_TYPE=$COAL_BUILD_TYPE",
   "-DGENERATE_PYTHON_STUBS=$COAL_PYTHON_STUBS",
   "-DCOAL_PYTHON_NANOBIND=$COAL_PYTHON_NANOBIND",
+  "-DCOAL_BUILD_TESTS=ON",
   "-DCOAL_BUILD_WITH_LOGGING=ON",
   "-DCOAL_BUILD_WITH_TRACY=ON",
   "-DCOAL_BUILD_WITH_ASSIMP=$COAL_BUILD_WITH_ASSIMP",
   "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
-  "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL"
+  "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
 ] }
 build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
 clean = { cmd = "rm -rf build" }

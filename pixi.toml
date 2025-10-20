@@ -120,9 +120,9 @@ configure = { cmd = [
   "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
   "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
 ] }
-build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
-clean = { cmd = "rm -rf build" }
-test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = [
+build = { cmd = "cmake --build build/$COAL_BUILD_TYPE --target all", depends-on = ["configure"] }
+clean = { cmd = "rm -rf build/$COAL_BUILD_TYPE" }
+test = { cmd = "ctest --test-dir build/$COAL_BUILD_TYPE --output-on-failure", depends-on = [
   "build",
 ] }
 

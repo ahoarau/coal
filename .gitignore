@@ -1,10 +1,14 @@
-build*/
-Xcode/*
+build*
+install*
+Xcode*
 *~
 *.pyc
-.cache/
+.vscode*
+.cache
+compile_commands.json
+.ruff_cache
+.DS_Store
+cmake-profiling.json
 __pycache__/
-
-# pixi environments
 .pixi
 *.egg-info

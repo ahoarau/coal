@@ -247,6 +247,7 @@ target_sources(
     src/mesh_loader/loader.cpp
     src/hfield.cpp
     src/serialization/serialization.cpp
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:src/octree.cpp>
 )
 
 xxx_declare_component(TARGETS coal COMPONENT coal)
@@ -373,6 +374,9 @@ xxx_target_headers(coal PUBLIC
     include/coal/serialization/quadrilateral.h
     include/coal/serialization/triangle.h
     include/coal/timings.h
+    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/octree.h>
+    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/serialization/octree.h>
+    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/internal/traversal_node_octree.h>
   BASE_DIRS include
 )
 

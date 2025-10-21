@@ -31,6 +31,7 @@ xxx_configure_default_install_dirs()
 # ----------------------------------------------------
 xxx_option(COAL_BUILD_DOCUMENTATION "Build the documentation" OFF)
 xxx_option(COAL_INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
+xxx_option(COAL_INSTALL_HEADERS "Install the header files" ON)
 cmake_dependent_option(
   COAL_BUILD_DOCUMENTATION
   "Build the documentation"
@@ -132,6 +133,7 @@ if(WIN32)
   # There is an issue with MSVC 2017 and Eigen (due to std::aligned_storage).
   # See https://github.com/ceres-solver/ceres-solver/issues/481
   target_compile_definitions(coal PRIVATE _ENABLE_EXTENDED_ALIGNED_STORAGE)
+  target_compile_definitions(coal PUBLIC NOMINMAX)
 endif()
 
 target_compile_definitions(
@@ -374,11 +376,16 @@ xxx_target_headers(coal PUBLIC
   BASE_DIRS include
 )
 
-# if(COAL_INSTALL_HEADERS)
+if(COAL_INSTALL_HEADERS)
   xxx_install_headers()
-# endif()
+endif()
 
 xxx_generate_package_module_files()
+
+if(COAL_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(test)
+endif()
 
 return()
 

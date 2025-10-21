@@ -143,11 +143,31 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:COAL_HAS_OCTOMAP>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
+    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_BUILD_WITH_LOGGING BOOST_LOG_DYN_LINK>
+)
+target_link_libraries(
+  coal
+  PUBLIC
+    Eigen3::Eigen
+    Boost::serialization Boost::filesystem
+    assimp::assimp
+    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
+    $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:Tracy::TracyClient>
 )
 
-if(COAL_BUILD_WITH_TRACY)
-  target_link_libraries(coal PUBLIC Tracy::TracyClient)
-endif()
+target_include_directories(
+  coal
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+set_target_properties(coal PROPERTIES VERSION ${PROJECT_VERSION})
+xxx_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh)
+xxx_target_generate_warning_header(coal PUBLIC FILENAME coal/warning.hh)
+xxx_target_generate_deprecated_header(coal PUBLIC FILENAME coal/deprecated.hh)
+xxx_target_generate_tracy_header(coal PUBLIC FILENAME coal/tracy.hh)
 
 target_sources(
   coal
@@ -226,29 +246,6 @@ target_sources(
     src/hfield.cpp
     src/serialization/serialization.cpp
 )
-target_include_directories(
-  coal
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-target_link_libraries(
-  coal
-  PUBLIC
-    Eigen3::Eigen
-    Boost::serialization Boost::filesystem
-    assimp::assimp
-    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
-    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
-)
-include(GenerateExportHeader)
-generate_export_header(coal EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/generated/include/coal/export.hh)
-set_target_properties(coal PROPERTIES VERSION ${PROJECT_VERSION})
-xxx_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh)
-xxx_target_generate_warning_header(coal PUBLIC FILENAME coal/warning.hh)
-xxx_target_generate_deprecated_header(coal PUBLIC FILENAME coal/deprecated.hh)
-xxx_target_generate_tracy_header(coal PUBLIC FILENAME coal/tracy.hh)
 
 return()
 

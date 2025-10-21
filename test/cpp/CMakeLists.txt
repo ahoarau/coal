@@ -2,11 +2,10 @@ project(coal-tests-cpp)
 
 add_library(coal-utility STATIC utility.cpp)
 target_link_libraries(coal-utility PUBLIC coal)
-target_include_directories(coal-utility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(coal-utility PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 function(coal_add_test test_name)
   add_executable(coal-test-${test_name} ${test_name}.cpp)
-  target_include_directories(coal-test-${test_name} PRIVATE ${arg_INCLUDE_DIRECTORIES})
   target_link_libraries(coal-test-${test_name} PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility coal-tests-resources)
   xxx_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
   boosttest_discover_tests(coal-test-${test_name} DISCOVERY_MODE "PRE_TEST")

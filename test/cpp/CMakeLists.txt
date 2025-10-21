@@ -8,6 +8,15 @@ function(coal_add_test test_name)
   add_executable(coal-test-${test_name} ${test_name}.cpp)
   target_link_libraries(coal-test-${test_name} PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility coal-tests-resources)
   xxx_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
+
+  # OLD METHOD
+  # add_test(NAME coal-test-${test_name} COMMAND coal-test-${test_name})
+  # if(ARGN)
+  #   set_tests_properties(coal-test-${test_name} PROPERTIES ${ARGN})
+  # endif()
+
+  # NEW METHOD
+  # Although this module works as expected, the properties will effect every sub-tests inside the test executable.
   boosttest_discover_tests(coal-test-${test_name} DISCOVERY_MODE "PRE_TEST" ${ARGN})
 endfunction()
 
@@ -23,7 +32,7 @@ coal_add_test(geometric_shapes)
 coal_add_test(shape_inflation)
 # #coal_add_test(shape_mesh_consistency)
 coal_add_test(gjk_asserts)
-coal_add_test(frontlist PROPERTIES TIMEOUT 7200)
+coal_add_test(frontlist TIMEOUT 7200)
 
 # coal_add_test(sphere_capsule)
 coal_add_test(capsule_capsule)
@@ -50,7 +59,7 @@ endif()
 coal_add_test(serialization)
 
 # Broadphase
-coal_add_test(broadphase PROPERTIES WILL_FAIL TRUE)
+coal_add_test(broadphase)
 coal_add_test(broadphase_dynamic_AABB_tree)
 coal_add_test(broadphase_collision_1)
 coal_add_test(broadphase_collision_2)

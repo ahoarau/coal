@@ -130,8 +130,15 @@ if(COAL_BUILD_TESTS)
   xxx_find_package(Boost CONFIG REQUIRED COMPONENTS unit_test_framework)
 endif()
 
-add_library(coal)
+add_library(coal SHARED)
+xxx_target_enforce_msvc_conformance(coal PRIVATE)
 target_compile_features(coal PUBLIC cxx_std_17)
+
+if(WIN32)
+  # There is an issue with MSVC 2017 and Eigen (due to std::aligned_storage).
+  # See https://github.com/ceres-solver/ceres-solver/issues/481
+  target_compile_definitions(coal PRIVATE _ENABLE_EXTENDED_ALIGNED_STORAGE)
+endif()
 
 target_compile_definitions(
   coal
@@ -146,7 +153,6 @@ target_compile_definitions(
 )
 
 if(COAL_BUILD_WITH_TRACY)
-  target_compile_definitions(coal PUBLIC COAL_TRACY_ENABLE)
   target_link_libraries(coal PUBLIC Tracy::TracyClient)
 endif()
 
@@ -243,7 +249,13 @@ target_link_libraries(
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
 )
-xxx_target_generate_config_header(coal PUBLIC)
+include(GenerateExportHeader)
+generate_export_header(coal EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/generated/include/coal/export.hh)
+set_target_properties(coal PROPERTIES VERSION ${PROJECT_VERSION})
+xxx_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh)
+xxx_target_generate_warning_header(coal PUBLIC FILENAME coal/warning.hh)
+xxx_target_generate_deprecated_header(coal PUBLIC FILENAME coal/deprecated.hh)
+xxx_target_generate_tracy_header(coal PUBLIC FILENAME coal/tracy.hh)
 
 return()
 

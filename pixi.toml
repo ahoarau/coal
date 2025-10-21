@@ -124,6 +124,9 @@ clean = { cmd = "rm -rf build/$COAL_BUILD_TYPE" }
 test = { cmd = "ctest --test-dir build/$COAL_BUILD_TYPE --output-on-failure", depends-on = [
   "build",
 ] }
+install = { cmd = "cmake --build build/$COAL_BUILD_TYPE --target install", depends-on = [
+  "build",
+] }
 
 [feature.lint]
 dependencies = { pre-commit = ">=3.6.2" }

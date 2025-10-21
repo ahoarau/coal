@@ -247,6 +247,139 @@ target_sources(
     src/serialization/serialization.cpp
 )
 
+xxx_declare_component(TARGETS coal COMPONENT coal)
+xxx_target_headers(coal PUBLIC
+  HEADERS
+    include/coal/collision_data.h
+    include/coal/BV/kIOS.h
+    include/coal/BV/BV.h
+    include/coal/BV/RSS.h
+    include/coal/BV/OBBRSS.h
+    include/coal/BV/BV_node.h
+    include/coal/BV/AABB.h
+    include/coal/BV/OBB.h
+    include/coal/BV/kDOP.h
+    include/coal/broadphase/broadphase.h
+    include/coal/broadphase/broadphase_SSaP.h
+    include/coal/broadphase/broadphase_SaP.h
+    include/coal/broadphase/broadphase_bruteforce.h
+    include/coal/broadphase/broadphase_collision_manager.h
+    include/coal/broadphase/broadphase_continuous_collision_manager-inl.h
+    include/coal/broadphase/broadphase_continuous_collision_manager.h
+    include/coal/broadphase/broadphase_dynamic_AABB_tree-inl.h
+    include/coal/broadphase/broadphase_dynamic_AABB_tree.h
+    include/coal/broadphase/broadphase_dynamic_AABB_tree_array-inl.h
+    include/coal/broadphase/broadphase_dynamic_AABB_tree_array.h
+    include/coal/broadphase/broadphase_interval_tree.h
+    include/coal/broadphase/broadphase_spatialhash-inl.h
+    include/coal/broadphase/broadphase_spatialhash.h
+    include/coal/broadphase/broadphase_callbacks.h
+    include/coal/broadphase/default_broadphase_callbacks.h
+    include/coal/broadphase/detail/hierarchy_tree-inl.h
+    include/coal/broadphase/detail/hierarchy_tree.h
+    include/coal/broadphase/detail/hierarchy_tree_array-inl.h
+    include/coal/broadphase/detail/hierarchy_tree_array.h
+    include/coal/broadphase/detail/interval_tree.h
+    include/coal/broadphase/detail/interval_tree_node.h
+    include/coal/broadphase/detail/morton-inl.h
+    include/coal/broadphase/detail/morton.h
+    include/coal/broadphase/detail/node_base-inl.h
+    include/coal/broadphase/detail/node_base.h
+    include/coal/broadphase/detail/node_base_array-inl.h
+    include/coal/broadphase/detail/node_base_array.h
+    include/coal/broadphase/detail/simple_hash_table-inl.h
+    include/coal/broadphase/detail/simple_hash_table.h
+    include/coal/broadphase/detail/simple_interval-inl.h
+    include/coal/broadphase/detail/simple_interval.h
+    include/coal/broadphase/detail/sparse_hash_table-inl.h
+    include/coal/broadphase/detail/sparse_hash_table.h
+    include/coal/broadphase/detail/spatial_hash-inl.h
+    include/coal/broadphase/detail/spatial_hash.h
+    include/coal/narrowphase/narrowphase.h
+    include/coal/narrowphase/gjk.h
+    include/coal/narrowphase/narrowphase_defaults.h
+    include/coal/narrowphase/minkowski_difference.h
+    include/coal/narrowphase/support_data.h
+    include/coal/narrowphase/support_functions.h
+    include/coal/shape/convex.h
+    include/coal/shape/convex.hxx
+    include/coal/shape/geometric_shape_to_BVH_model.h
+    include/coal/shape/geometric_shapes.h
+    include/coal/shape/geometric_shapes.hxx
+    include/coal/shape/geometric_shapes_traits.h
+    include/coal/shape/geometric_shapes_utility.h
+    include/coal/distance_func_matrix.h
+    include/coal/collision.h
+    include/coal/collision_func_matrix.h
+    include/coal/contact_patch.h
+    include/coal/contact_patch_func_matrix.h
+    include/coal/contact_patch/contact_patch_solver.h
+    include/coal/contact_patch/contact_patch_solver.hxx
+    include/coal/distance.h
+    include/coal/math/matrix_3f.h
+    include/coal/math/vec_3f.h
+    include/coal/math/types.h
+    include/coal/math/transform.h
+    include/coal/data_types.h
+    include/coal/BVH/BVH_internal.h
+    include/coal/BVH/BVH_model.h
+    include/coal/BVH/BVH_front.h
+    include/coal/BVH/BVH_utility.h
+    include/coal/collision_object.h
+    include/coal/collision_utility.h
+    include/coal/hfield.h
+    include/coal/fwd.hh
+    include/coal/logging.h
+    include/coal/mesh_loader/assimp.h
+    include/coal/mesh_loader/loader.h
+    include/coal/internal/BV_fitter.h
+    include/coal/internal/BV_splitter.h
+    include/coal/internal/shape_shape_func.h
+    include/coal/internal/shape_shape_contact_patch_func.h
+    include/coal/internal/intersect.h
+    include/coal/internal/intersect.hxx
+    include/coal/internal/tools.h
+    include/coal/internal/traversal_node_base.h
+    include/coal/internal/traversal_node_bvh_shape.h
+    include/coal/internal/traversal_node_bvhs.h
+    include/coal/internal/traversal_node_hfield_shape.h
+    include/coal/internal/traversal_node_setup.h
+    include/coal/internal/traversal_node_shapes.h
+    include/coal/internal/traversal_recurse.h
+    include/coal/internal/traversal.h
+    include/coal/serialization/fwd.h
+    include/coal/serialization/serializer.h
+    include/coal/serialization/archive.h
+    include/coal/serialization/transform.h
+    include/coal/serialization/AABB.h
+    include/coal/serialization/BV_node.h
+    include/coal/serialization/BV_splitter.h
+    include/coal/serialization/BVH_model.h
+    include/coal/serialization/collision_data.h
+    include/coal/serialization/contact_patch.h
+    include/coal/serialization/collision_object.h
+    include/coal/serialization/convex.h
+    include/coal/serialization/eigen.h
+    include/coal/serialization/geometric_shapes.h
+    include/coal/serialization/memory.h
+    include/coal/serialization/OBB.h
+    include/coal/serialization/RSS.h
+    include/coal/serialization/OBBRSS.h
+    include/coal/serialization/kIOS.h
+    include/coal/serialization/kDOP.h
+    include/coal/serialization/hfield.h
+    include/coal/serialization/quadrilateral.h
+    include/coal/serialization/triangle.h
+    include/coal/timings.h
+  BASE_DIRS include
+)
+
+# if(COAL_INSTALL_HEADERS)
+  xxx_install_headers()
+# endif()
+
+xxx_generate_package_module_files()
+
 return()
 
 # ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.0")

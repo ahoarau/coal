@@ -7,10 +7,9 @@ target_include_directories(coal-utility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMA
 function(coal_add_test test_name)
   add_executable(coal-test-${test_name} ${test_name}.cpp)
   target_include_directories(coal-test-${test_name} PRIVATE ${arg_INCLUDE_DIRECTORIES})
-  target_link_libraries(coal-test-${test_name} PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility)
-  target_compile_definitions(coal-test-${test_name} PRIVATE TEST_RESOURCES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/fcl_resources\")
+  target_link_libraries(coal-test-${test_name} PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility coal-tests-resources)
   xxx_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
-  # catch_discover_tests(coal-test-${test_name} DISCOVERY_MODE "PRE_TEST")
+  boosttest_discover_tests(coal-test-${test_name} DISCOVERY_MODE "PRE_TEST")
 endfunction()
 
 coal_add_test(math)
@@ -42,8 +41,6 @@ coal_add_test(bvh_models)
 coal_add_test(collision_node_asserts)
 coal_add_test(hfields)
 
-coal_add_test(profiling)
-
 coal_add_test(gjk)
 coal_add_test(accelerated_gjk)
 coal_add_test(gjk_convergence_criterion)
@@ -61,7 +58,10 @@ coal_add_test(broadphase_dynamic_AABB_tree)
 coal_add_test(broadphase_collision_1)
 coal_add_test(broadphase_collision_2)
 
+## Profiling
+add_executable(coal-test-profiling profiling.cpp)
+target_link_libraries(coal-test-profiling PRIVATE coal-utility Boost::filesystem coal coal-tests-resources)
+
 ## Benchmark
 add_executable(coal-test-benchmark benchmark.cpp)
-target_link_libraries(coal-test-benchmark PUBLIC coal-utility Boost::filesystem coal)
-target_compile_definitions(coal-test-benchmark PRIVATE TEST_RESOURCES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/fcl_resources\")
+target_link_libraries(coal-test-benchmark PRIVATE coal-utility Boost::filesystem coal coal-tests-resources)

@@ -72,11 +72,6 @@ xxx_option(
   OFF
 )
 xxx_option(
-  COAL_BUILD_WITH_ASSIMP
-  "Build with Assimp support"
-  OFF
-)
-xxx_option(
   COAL_BUILD_WITH_QHULL
   "Build with QHull support"
   OFF
@@ -106,6 +101,8 @@ xxx_find_package(Eigen3 3.4.0 CONFIG REQUIRED)
 
 xxx_find_package(Boost CONFIG REQUIRED COMPONENTS serialization filesystem)
 
+xxx_find_package(assimp CONFIG REQUIRED)
+
 if(COAL_BUILD_WITH_LOGGING)
   xxx_find_package(Boost CONFIG REQUIRED COMPONENTS log)
 endif()
@@ -114,9 +111,6 @@ if(COAL_BUILD_WITH_TRACY)
   xxx_find_package(Tracy CONFIG REQUIRED)
 endif()
 
-if(COAL_BUILD_WITH_ASSIMP)
-  xxx_find_package(assimp CONFIG REQUIRED)
-endif()
 
 if(COAL_BUILD_WITH_OCTOMAP)
   xxx_find_package(octomap 1.8.0 CONFIG REQUIRED)
@@ -146,7 +140,6 @@ target_compile_definitions(
     $<$<BOOL:${COAL_USE_FLOAT_PRECISION}>:COAL_USE_FLOAT_PRECISION>
     $<$<BOOL:${COAL_TURN_ASSERT_INTO_EXCEPTION}>:COAL_TURN_ASSERT_INTO_EXCEPTION>
     $<$<BOOL:${COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL}>:COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL>
-    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:COAL_HAS_ASSIMP>
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:COAL_HAS_OCTOMAP>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
@@ -228,7 +221,7 @@ target_sources(
     src/BVH/BV_splitter.cpp
     src/collision_func_matrix.cpp
     src/collision_utility.cpp
-    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:src/mesh_loader/assimp.cpp>
+    src/mesh_loader/assimp.cpp
     src/mesh_loader/loader.cpp
     src/hfield.cpp
     src/serialization/serialization.cpp
@@ -244,8 +237,8 @@ target_link_libraries(
   PUBLIC
     Eigen3::Eigen
     Boost::serialization Boost::filesystem
+    assimp::assimp
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
-    $<$<BOOL:${COAL_BUILD_WITH_ASSIMP}>:assimp::assimp>
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
 )

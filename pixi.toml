@@ -25,6 +25,7 @@ lxml = ">=5.3"
 pylatexenc = ">=2.10"
 nanoeigenpy = ">=0.3.0"
 tracy-profiler = ">=0.7.7"
+assimp = ">=5.4"
 
 [package]
 name = { workspace = true }
@@ -108,7 +109,6 @@ configure = { cmd = [
   "-DPYTHON_STANDARD_LAYOUT=OFF",
   "--profiling-output=cmake-profiling.json",
   "--profiling-format=google-trace",
-  "-DPython_EXECUTABLE=$PYTHON_EXECUTABLE",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
   "-DCMAKE_BUILD_TYPE=$COAL_BUILD_TYPE",
   "-DGENERATE_PYTHON_STUBS=$COAL_PYTHON_STUBS",
@@ -116,7 +116,6 @@ configure = { cmd = [
   "-DCOAL_BUILD_TESTS=ON",
   "-DCOAL_BUILD_WITH_LOGGING=ON",
   "-DCOAL_BUILD_WITH_TRACY=ON",
-  "-DCOAL_BUILD_WITH_ASSIMP=$COAL_BUILD_WITH_ASSIMP",
   "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
   "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
 ] }
@@ -175,11 +174,6 @@ activation.env = { COAL_PYTHON_NANOBIND = "OFF" }
 dependencies = { octomap = ">=1.10" }
 activation = { env = { COAL_BUILD_WITH_OCTOMAP = "ON" } }
 
-# Assimp support
-[feature.assimp]
-dependencies = { assimp = ">=5.4" }
-activation = { env = { COAL_BUILD_WITH_ASSIMP = "ON" } }
-
 # Boost Logging support
 [feature.logging]
 activation = { env = { COAL_BUILD_WITH_LOGGING = "ON" } }
@@ -232,7 +226,6 @@ all = { features = [
   "logging",
   "qhull",
   "octomap",
-  "assimp",
   "python-latest",
 ], solve-group = "python-latest" }
 # No solve-group, because boost.python will be legacy
@@ -240,7 +233,6 @@ all-boost-python = { features = [
   "logging",
   "qhull",
   "octomap",
-  "assimp",
   "python-latest",
   "boost-python",
 ] }
@@ -248,14 +240,12 @@ all-python-oldest = { features = [
   "logging",
   "qhull",
   "octomap",
-  "assimp",
   "python-oldest",
 ], solve-group = "python-oldest" }
 all-clang-cl = { features = [
   "logging",
   "qhull",
   "octomap",
-  "assimp",
   "clang-cl",
   "python-latest",
 ], solve-group = "python-latest" }
@@ -264,7 +254,6 @@ new-version = { features = [
   "logging",
   "qhull",
   "octomap",
-  "assimp",
   "new-version",
   "python-latest",
 ], solve-group = "python-latest" }

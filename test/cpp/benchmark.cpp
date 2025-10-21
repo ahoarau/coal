@@ -22,7 +22,7 @@
 #include "coal/internal/BV_splitter.h"
 
 #include "utility.h"
-#include "fcl_resources/config.h"
+
 
 #define RUN_CASE(BV, tf, models, split) \
   run<BV>(tf, models, split, #BV " - " #split ":\t")

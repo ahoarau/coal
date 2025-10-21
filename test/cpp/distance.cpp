@@ -47,7 +47,7 @@
 #include "coal/internal/BV_splitter.h"
 
 #include "utility.h"
-#include "fcl_resources/config.h"
+
 
 using namespace coal;
 namespace utf = boost::unit_test::framework;

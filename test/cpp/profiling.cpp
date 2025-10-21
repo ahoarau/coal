@@ -25,7 +25,7 @@
 #include "coal/narrowphase/narrowphase.h"
 #include "coal/mesh_loader/assimp.h"
 #include "utility.h"
-#include "fcl_resources/config.h"
+
 
 using namespace coal;
 

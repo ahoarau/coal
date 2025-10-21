@@ -64,7 +64,7 @@ COAL_COMPILER_DIAGNOSTIC_IGNORED_DEPRECECATED_DECLARATIONS
 #endif
 
 #include "utility.h"
-#include "fcl_resources/config.h"
+
 
 #include <boost/archive/tmpdir.hpp>
 #include <boost/filesystem.hpp>

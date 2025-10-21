@@ -4,7 +4,7 @@
 #include "coal/internal/intersect.h"
 #include "coal/collision.h"
 #include "coal/BVH/BVH_model.h"
-#include "fcl_resources/config.h"
+
 #include <sstream>
 
 using namespace coal;

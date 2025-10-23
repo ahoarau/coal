@@ -128,6 +128,10 @@ install = { cmd = "cmake --build build/$COAL_BUILD_TYPE --target install", depen
   "build",
 ] }
 
+[tasks.test-packaging]
+depends-on = ["install"]
+cmd = "cmake -G Ninja -S test/packaging/cmake -B build/$COAL_BUILD_TYPE/test-packaging -DCMAKE_VERBOSE_MAKEFILE=1 && cmake --build build/$COAL_BUILD_TYPE/test-packaging && build/$COAL_BUILD_TYPE/test-packaging/coal_test_packaging"
+
 [feature.lint]
 dependencies = { pre-commit = ">=3.6.2" }
 tasks = { lint = { cmd = "pre-commit run --all" } }

@@ -18,13 +18,13 @@ project(
     "Coal, The Collision Detection Library. Previously known as HPP-FCL, fork of FCL -- The Flexible Collision Library"
   HOMEPAGE_URL "https://github.com/coal-library/coal"
 )
-
 xxx_include_ctest()
 include(CMakeDependentOption)
 xxx_configure_default_build_type(Release)
 xxx_configure_default_install_prefix(${CMAKE_CURRENT_BINARY_DIR}/tmp-install)
 xxx_configure_default_binary_dirs()
 xxx_configure_default_install_dirs()
+xxx_configure_apple_rpath()
 
 # ----------------------------------------------------
 # --- OPTIONS  ---------------------------------------

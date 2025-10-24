@@ -380,200 +380,17 @@ xxx_target_headers(coal PUBLIC
   BASE_DIRS include
 )
 
-if(COAL_INSTALL_HEADERS)
-  xxx_install_headers()
-endif()
-
-xxx_generate_package_module_files()
-
-if(COAL_BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(test)
-endif()
-
-return()
-
-# ADD_PROJECT_DEPENDENCY(Eigen3 REQUIRED PKG_CONFIG_REQUIRES "eigen3 >= 3.0.0")
-
-# # -- tracy profiling (optional)
-# if(COAL_BUILD_WITH_TRACY)
-#   # assume it is installed somewhere
-#   ADD_PROJECT_DEPENDENCY(Tracy REQUIRED)
-#   set_target_properties(
-#     Tracy::TracyClient
-#     PROPERTIES POSITION_INDEPENDENT_CODE True
-#   )
-# endif(COAL_BUILD_WITH_TRACY)
-
-# # Required dependencies
-# SET_BOOST_DEFAULT_OPTIONS()
-# EXPORT_BOOST_DEFAULT_OPTIONS()
-# ADD_PROJECT_DEPENDENCY(Boost REQUIRED serialization filesystem)
-# if(COAL_BUILD_WITH_LOGGING)
-#   ADD_PROJECT_DEPENDENCY(Boost REQUIRED log)
-# endif()
-
-# if(Boost_VERSION_STRING VERSION_LESS 1.81)
-#   # Default C++ version should be C++11
-#   CHECK_MINIMAL_CXX_STANDARD(11 ENFORCE)
-# else()
-#   # Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)
-#   CHECK_MINIMAL_CXX_STANDARD(14 ENFORCE)
-# endif()
-
-# # Optional dependencies
-# ADD_PROJECT_DEPENDENCY(octomap 1.8.0 PKG_CONFIG_REQUIRES "octomap >= 1.8")
-# if(octomap_FOUND)
-#   set(COAL_HAS_OCTOMAP TRUE)
-#   string(REPLACE "." ";" VERSION_LIST ${octomap_VERSION})
-#   list(GET VERSION_LIST 0 OCTOMAP_MAJOR_VERSION)
-#   list(GET VERSION_LIST 1 OCTOMAP_MINOR_VERSION)
-#   list(GET VERSION_LIST 2 OCTOMAP_PATCH_VERSION)
-#   message(STATUS "COAL uses Octomap")
-# else()
-#   set(COAL_HAS_OCTOMAP FALSE)
-#   message(STATUS "COAL does not use Octomap")
-# endif()
-
-# option(COAL_HAS_QHULL "use qhull library to compute convex hulls." FALSE)
-# if(COAL_HAS_QHULL)
-#   find_package(Qhull REQUIRED COMPONENTS qhull_r qhullcpp)
-# endif()
-
-# find_package(assimp REQUIRED)
-
-set(
-  ${PROJECT_NAME}_HEADERS
-  include/coal/collision_data.h
-  include/coal/BV/kIOS.h
-  include/coal/BV/BV.h
-  include/coal/BV/RSS.h
-  include/coal/BV/OBBRSS.h
-  include/coal/BV/BV_node.h
-  include/coal/BV/AABB.h
-  include/coal/BV/OBB.h
-  include/coal/BV/kDOP.h
-  include/coal/broadphase/broadphase.h
-  include/coal/broadphase/broadphase_SSaP.h
-  include/coal/broadphase/broadphase_SaP.h
-  include/coal/broadphase/broadphase_bruteforce.h
-  include/coal/broadphase/broadphase_collision_manager.h
-  include/coal/broadphase/broadphase_continuous_collision_manager-inl.h
-  include/coal/broadphase/broadphase_continuous_collision_manager.h
-  include/coal/broadphase/broadphase_dynamic_AABB_tree-inl.h
-  include/coal/broadphase/broadphase_dynamic_AABB_tree.h
-  include/coal/broadphase/broadphase_dynamic_AABB_tree_array-inl.h
-  include/coal/broadphase/broadphase_dynamic_AABB_tree_array.h
-  include/coal/broadphase/broadphase_interval_tree.h
-  include/coal/broadphase/broadphase_spatialhash-inl.h
-  include/coal/broadphase/broadphase_spatialhash.h
-  include/coal/broadphase/broadphase_callbacks.h
-  include/coal/broadphase/default_broadphase_callbacks.h
-  include/coal/broadphase/detail/hierarchy_tree-inl.h
-  include/coal/broadphase/detail/hierarchy_tree.h
-  include/coal/broadphase/detail/hierarchy_tree_array-inl.h
-  include/coal/broadphase/detail/hierarchy_tree_array.h
-  include/coal/broadphase/detail/interval_tree.h
-  include/coal/broadphase/detail/interval_tree_node.h
-  include/coal/broadphase/detail/morton-inl.h
-  include/coal/broadphase/detail/morton.h
-  include/coal/broadphase/detail/node_base-inl.h
-  include/coal/broadphase/detail/node_base.h
-  include/coal/broadphase/detail/node_base_array-inl.h
-  include/coal/broadphase/detail/node_base_array.h
-  include/coal/broadphase/detail/simple_hash_table-inl.h
-  include/coal/broadphase/detail/simple_hash_table.h
-  include/coal/broadphase/detail/simple_interval-inl.h
-  include/coal/broadphase/detail/simple_interval.h
-  include/coal/broadphase/detail/sparse_hash_table-inl.h
-  include/coal/broadphase/detail/sparse_hash_table.h
-  include/coal/broadphase/detail/spatial_hash-inl.h
-  include/coal/broadphase/detail/spatial_hash.h
-  include/coal/narrowphase/narrowphase.h
-  include/coal/narrowphase/gjk.h
-  include/coal/narrowphase/narrowphase_defaults.h
-  include/coal/narrowphase/minkowski_difference.h
-  include/coal/narrowphase/support_data.h
-  include/coal/narrowphase/support_functions.h
-  include/coal/shape/convex.h
-  include/coal/shape/convex.hxx
-  include/coal/shape/geometric_shape_to_BVH_model.h
-  include/coal/shape/geometric_shapes.h
-  include/coal/shape/geometric_shapes.hxx
-  include/coal/shape/geometric_shapes_traits.h
-  include/coal/shape/geometric_shapes_utility.h
-  include/coal/distance_func_matrix.h
-  include/coal/collision.h
-  include/coal/collision_func_matrix.h
-  include/coal/contact_patch.h
-  include/coal/contact_patch_func_matrix.h
-  include/coal/contact_patch/contact_patch_solver.h
-  include/coal/contact_patch/contact_patch_solver.hxx
-  include/coal/contact_patch/contact_patch_simplifier.h
-  include/coal/distance.h
-  include/coal/math/matrix_3f.h
-  include/coal/math/vec_3f.h
-  include/coal/math/types.h
-  include/coal/math/transform.h
-  include/coal/data_types.h
-  include/coal/BVH/BVH_internal.h
-  include/coal/BVH/BVH_model.h
-  include/coal/BVH/BVH_front.h
-  include/coal/BVH/BVH_utility.h
-  include/coal/collision_object.h
-  include/coal/collision_utility.h
-  include/coal/hfield.h
-  include/coal/fwd.hh
-  include/coal/logging.h
-  include/coal/mesh_loader/assimp.h
-  include/coal/mesh_loader/loader.h
-  include/coal/internal/BV_fitter.h
-  include/coal/internal/BV_splitter.h
-  include/coal/internal/shape_shape_func.h
-  include/coal/internal/shape_shape_contact_patch_func.h
-  include/coal/internal/intersect.h
-  include/coal/internal/intersect.hxx
-  include/coal/internal/tools.h
-  include/coal/internal/traversal_node_base.h
-  include/coal/internal/traversal_node_bvh_shape.h
-  include/coal/internal/traversal_node_bvhs.h
-  include/coal/internal/traversal_node_hfield_shape.h
-  include/coal/internal/traversal_node_setup.h
-  include/coal/internal/traversal_node_shapes.h
-  include/coal/internal/traversal_recurse.h
-  include/coal/internal/traversal.h
-  include/coal/serialization/fwd.h
-  include/coal/serialization/serializer.h
-  include/coal/serialization/archive.h
-  include/coal/serialization/transform.h
-  include/coal/serialization/AABB.h
-  include/coal/serialization/BV_node.h
-  include/coal/serialization/BV_splitter.h
-  include/coal/serialization/BVH_model.h
-  include/coal/serialization/collision_data.h
-  include/coal/serialization/contact_patch.h
-  include/coal/serialization/collision_object.h
-  include/coal/serialization/convex.h
-  include/coal/serialization/eigen.h
-  include/coal/serialization/geometric_shapes.h
-  include/coal/serialization/memory.h
-  include/coal/serialization/OBB.h
-  include/coal/serialization/RSS.h
-  include/coal/serialization/OBBRSS.h
-  include/coal/serialization/kIOS.h
-  include/coal/serialization/kDOP.h
-  include/coal/serialization/hfield.h
-  include/coal/serialization/quadrilateral.h
-  include/coal/serialization/triangle.h
-  include/coal/timings.h
+add_library(coal-fcl-compatibility INTERFACE)
+target_link_libraries(coal-fcl-compatibility INTERFACE coal)
+target_include_directories(
+  coal-fcl-compatibility
+  INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-
-if(
-  COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL
-  AND NOT BUILD_STANDALONE_PYTHON_INTERFACE
-)
-  set(
-    HPP_FCL_BACKWARD_COMPATIBILITY_HEADERS
+xxx_declare_component(TARGETS coal-fcl-compatibility COMPONENT coal-fcl-compatibility)
+xxx_target_headers(coal-fcl-compatibility PUBLIC
+  HEADERS
     include/hpp/fcl/broadphase/broadphase_bruteforce.h
     include/hpp/fcl/broadphase/broadphase_callbacks.h
     include/hpp/fcl/broadphase/broadphase_collision_manager.h
@@ -653,7 +470,6 @@ if(
     include/hpp/fcl/internal/traversal_node_setup.h
     include/hpp/fcl/internal/traversal_node_shapes.h
     include/hpp/fcl/internal/traversal_recurse.h
-    include/hpp/fcl/internal/traversal_node_octree.h
     include/hpp/fcl/logging.h
     include/hpp/fcl/math/matrix_3f.h
     include/hpp/fcl/math/transform.h
@@ -668,7 +484,6 @@ if(
     include/hpp/fcl/narrowphase/support_data.h
     include/hpp/fcl/narrowphase/support_functions.h
     include/hpp/fcl/narrowphase/support_functions.hxx
-    include/hpp/fcl/octree.h
     include/hpp/fcl/serialization/AABB.h
     include/hpp/fcl/serialization/archive.h
     include/hpp/fcl/serialization/BVH_model.h
@@ -687,7 +502,6 @@ if(
     include/hpp/fcl/serialization/memory.h
     include/hpp/fcl/serialization/OBB.h
     include/hpp/fcl/serialization/OBBRSS.h
-    include/hpp/fcl/serialization/octree.h
     include/hpp/fcl/serialization/quadrilateral.h
     include/hpp/fcl/serialization/RSS.h
     include/hpp/fcl/serialization/serializer.h
@@ -702,58 +516,51 @@ if(
     include/hpp/fcl/shape/geometric_shape_to_BVH_model.h
     include/hpp/fcl/timings.h
     include/hpp/fcl/warning.hh
-  )
-  list(APPEND ${PROJECT_NAME}_HEADERS ${HPP_FCL_BACKWARD_COMPATIBILITY_HEADERS})
-  if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
-    header_install(
-      COMPONENT hpp-fcl-compatibility
-      ${HPP_FCL_BACKWARD_COMPATIBILITY_HEADERS}
-    )
-  endif()
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/octree.h>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/serialization/octree.h>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/internal/traversal_node_octree.h>
+  BASE_DIRS include
+)
+
+if(COAL_INSTALL_HEADERS)
+  xxx_install_headers()
 endif()
 
-if(COAL_BUILD_WITH_OCTOMAP)
-  list(
-    APPEND
-    ${PROJECT_NAME}_HEADERS
-    include/coal/octree.h
-    include/coal/serialization/octree.h
-    include/coal/internal/traversal_node_octree.h
-  )
-endif()
+xxx_generate_package_module_files()
 
 if(COAL_BUILD_DOCUMENTATION)
   add_subdirectory(doc)
-endif()
-
-if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
-  add_subdirectory(src)
-endif()
-
-if(BUILD_PYTHON_INTERFACE)
-  if(BUILD_STANDALONE_PYTHON_INTERFACE)
-    add_project_dependency(${PROJECT_NAME} REQUIRED CONFIG)
-  endif()
-  add_custom_target(${PROJECT_NAME}_python)
-  set_target_properties(
-    ${PROJECT_NAME}_python
-    PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True
-  )
-  if(COAL_PYTHON_NANOBIND)
-    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
-    # jrl-cmakemodules use PYTHON_EXECUTABLE defined in FINDPYTHON macro.
-    # Since we doesn't call it in this branch, we must redefine it.
-    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-    add_subdirectory(python-nb)
-  else()
-    set(PYTHON_COMPONENTS Interpreter Development NumPy)
-    findpython(REQUIRED)
-    add_project_private_dependency(eigenpy 2.9.2 REQUIRED)
-    add_subdirectory(python)
-  endif()
 endif()
 
 if(COAL_BUILD_TESTS)
   enable_testing()
   add_subdirectory(test)
 endif()
+
+
+# if(COAL_BUILD_DOCUMENTATION)
+#   add_subdirectory(doc)
+# endif()
+
+# if(BUILD_PYTHON_INTERFACE)
+#   if(BUILD_STANDALONE_PYTHON_INTERFACE)
+#     add_project_dependency(${PROJECT_NAME} REQUIRED CONFIG)
+#   endif()
+#   add_custom_target(${PROJECT_NAME}_python)
+#   set_target_properties(
+#     ${PROJECT_NAME}_python
+#     PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True
+#   )
+#   if(COAL_PYTHON_NANOBIND)
+#     find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+#     # jrl-cmakemodules use PYTHON_EXECUTABLE defined in FINDPYTHON macro.
+#     # Since we doesn't call it in this branch, we must redefine it.
+#     set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+#     add_subdirectory(python-nb)
+#   else()
+#     set(PYTHON_COMPONENTS Interpreter Development NumPy)
+#     findpython(REQUIRED)
+#     add_project_private_dependency(eigenpy 2.9.2 REQUIRED)
+#     add_subdirectory(python)
+#   endif()
+# endif()

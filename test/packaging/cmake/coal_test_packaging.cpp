@@ -3,6 +3,7 @@
 #include <coal/BVH/BVH_model.h>
 #include <coal/collision.h>
 #include <coal/collision_data.h>
+#include <hpp/fcl/broadphase/broadphase.h>
 #include <iostream>
 #include <memory>
 

@@ -380,16 +380,16 @@ xxx_target_headers(coal PUBLIC
   BASE_DIRS include
 )
 
-add_library(coal-fcl-compatibility INTERFACE)
-target_link_libraries(coal-fcl-compatibility INTERFACE coal)
+add_library(coal-hpp-fcl-compatibility INTERFACE)
+target_link_libraries(coal-hpp-fcl-compatibility INTERFACE coal)
 target_include_directories(
-  coal-fcl-compatibility
+  coal-hpp-fcl-compatibility
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-xxx_declare_component(TARGETS coal-fcl-compatibility COMPONENT coal-fcl-compatibility)
-xxx_target_headers(coal-fcl-compatibility PUBLIC
+xxx_declare_component(TARGETS coal-hpp-fcl-compatibility COMPONENT coal-hpp-fcl-compatibility)
+xxx_target_headers(coal-hpp-fcl-compatibility PUBLIC
   HEADERS
     include/hpp/fcl/broadphase/broadphase_bruteforce.h
     include/hpp/fcl/broadphase/broadphase_callbacks.h

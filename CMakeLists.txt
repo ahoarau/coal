@@ -29,10 +29,9 @@ xxx_configure_apple_rpath()
 # ----------------------------------------------------
 # --- OPTIONS  ---------------------------------------
 # ----------------------------------------------------
-xxx_option(COAL_BUILD_DOCUMENTATION "Build the documentation" OFF)
 xxx_option(COAL_INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 xxx_option(COAL_INSTALL_HEADERS "Install the header files" ON)
-cmake_dependent_option(
+xxx_cmake_dependent_option(
   COAL_BUILD_DOCUMENTATION
   "Build the documentation"
   OFF
@@ -77,7 +76,8 @@ xxx_option(
   "Build with QHull support"
   OFF
 )
-cmake_dependent_option(
+
+xxx_cmake_dependent_option(
   COAL_PYTHON_NANOBIND
   "Build the nanobind-based bindings."
   OFF
@@ -85,7 +85,7 @@ cmake_dependent_option(
   OFF
 )
 if(NOT COAL_PYTHON_NANOBIND)
-  cmake_dependent_option(
+  xxx_cmake_dependent_option(
     GENERATE_PYTHON_STUBS
     "Generate the Python stubs for the Python bindings (only for legacy Boost.Python bindings)"
     OFF
@@ -124,6 +124,21 @@ endif()
 if(COAL_BUILD_TESTS)
   xxx_find_package(Boost CONFIG REQUIRED COMPONENTS unit_test_framework)
 endif()
+
+if(BUILD_PYTHON_INTERFACE AND BUILD_STANDALONE_PYTHON_INTERFACE)
+  xxx_find_package(coal CONFIG REQUIRED)
+endif()
+
+if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
+  xxx_find_nanobind()
+  xxx_find_package(nanoeigenpy CONFIG REQUIRED)
+endif()
+
+if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
+  xxx_find_package(eigenpy 2.9.2 CONFIG REQUIRED)
+endif()
+
+# ----------------------------------------------------
 
 add_library(coal SHARED)
 xxx_target_enforce_msvc_conformance(coal PRIVATE)
@@ -552,30 +567,21 @@ if(COAL_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
+if(BUILD_PYTHON_INTERFACE)
+  add_custom_target(coal_python)
+  set_target_properties(
+    coal_python
+    PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True
+  )
+endif()
 
-# if(COAL_BUILD_DOCUMENTATION)
-#   add_subdirectory(doc)
-# endif()
+if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
+  add_subdirectory(python-nb)
+endif()
 
-# if(BUILD_PYTHON_INTERFACE)
-#   if(BUILD_STANDALONE_PYTHON_INTERFACE)
-#     add_project_dependency(${PROJECT_NAME} REQUIRED CONFIG)
-#   endif()
-#   add_custom_target(${PROJECT_NAME}_python)
-#   set_target_properties(
-#     ${PROJECT_NAME}_python
-#     PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True
-#   )
-#   if(COAL_PYTHON_NANOBIND)
-#     find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
-#     # jrl-cmakemodules use PYTHON_EXECUTABLE defined in FINDPYTHON macro.
-#     # Since we doesn't call it in this branch, we must redefine it.
-#     set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
-#     add_subdirectory(python-nb)
-#   else()
-#     set(PYTHON_COMPONENTS Interpreter Development NumPy)
-#     findpython(REQUIRED)
-#     add_project_private_dependency(eigenpy 2.9.2 REQUIRED)
-#     add_subdirectory(python)
-#   endif()
-# endif()
+if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
+  add_subdirectory(python)
+endif()
+
+xxx_print_dependency_summary()
+xxx_print_option_summary()

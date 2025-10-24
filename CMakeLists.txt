@@ -374,11 +374,19 @@ xxx_target_headers(coal PUBLIC
     include/coal/serialization/quadrilateral.h
     include/coal/serialization/triangle.h
     include/coal/timings.h
-    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/octree.h>
-    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/serialization/octree.h>
-    $<$<BOOL:${BUILD_WITH_OCTOMAP}>:include/coal/internal/traversal_node_octree.h>
   BASE_DIRS include
 )
+
+if(COAL_BUILD_WITH_OCTOMAP)
+  xxx_target_headers(coal PUBLIC
+    HEADERS
+      include/coal/octree.h
+      include/coal/serialization/octree.h
+      include/coal/internal/traversal_node_octree.h
+    BASE_DIRS include
+  )
+endif()
+
 
 add_library(coal-hpp-fcl-compatibility INTERFACE)
 target_link_libraries(coal-hpp-fcl-compatibility INTERFACE coal)
@@ -516,11 +524,18 @@ xxx_target_headers(coal-hpp-fcl-compatibility PUBLIC
     include/hpp/fcl/shape/geometric_shape_to_BVH_model.h
     include/hpp/fcl/timings.h
     include/hpp/fcl/warning.hh
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/octree.h>
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/serialization/octree.h>
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/internal/traversal_node_octree.h>
   BASE_DIRS include
 )
+
+if(COAL_BUILD_WITH_OCTOMAP)
+  xxx_target_headers(coal-hpp-fcl-compatibility PUBLIC
+    HEADERS
+      include/hpp/fcl/octree.h
+      include/hpp/fcl/serialization/octree.h
+      include/hpp/fcl/internal/traversal_node_octree.h
+    BASE_DIRS include
+  )
+endif()
 
 if(COAL_INSTALL_HEADERS)
   xxx_install_headers()

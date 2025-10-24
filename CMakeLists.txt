@@ -516,9 +516,9 @@ xxx_target_headers(coal-fcl-compatibility PUBLIC
     include/hpp/fcl/shape/geometric_shape_to_BVH_model.h
     include/hpp/fcl/timings.h
     include/hpp/fcl/warning.hh
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/octree.h>
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/serialization/octree.h>
-    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}:include/hpp/fcl/internal/traversal_node_octree.h>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/octree.h>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/serialization/octree.h>
+    $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:${CMAKE_CURRENT_SOURCE_DIR}/include/hpp/fcl/internal/traversal_node_octree.h>
   BASE_DIRS include
 )
 

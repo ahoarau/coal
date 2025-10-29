@@ -27,6 +27,7 @@ pylatexenc = ">=2.10"
 nanoeigenpy = ">=0.3.0"
 tracy-profiler = ">=0.7.7"
 assimp = ">=5.4"
+pytest = ">=8.4.1,<9"
 
 [package]
 name = { workspace = true }
@@ -112,6 +113,7 @@ configure = { cmd = [
   "--profiling-format=google-trace",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
   "-DCMAKE_BUILD_TYPE=$COAL_BUILD_TYPE",
+  "-DBUILD_PYTHON_INTERFACE=ON",
   "-DGENERATE_PYTHON_STUBS=$COAL_PYTHON_STUBS",
   "-DCOAL_PYTHON_NANOBIND=$COAL_PYTHON_NANOBIND",
   "-DCOAL_BUILD_TESTS=ON",

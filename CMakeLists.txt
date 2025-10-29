@@ -77,6 +77,12 @@ xxx_option(
   OFF
 )
 
+xxx_option(
+  BUILD_PYTHON_INTERFACE
+  "Build the Python bindings (either with Boost.Python or Nanobind)"
+  OFF
+)
+
 xxx_cmake_dependent_option(
   COAL_PYTHON_NANOBIND
   "Build the nanobind-based bindings."
@@ -130,13 +136,11 @@ if(BUILD_PYTHON_INTERFACE AND BUILD_STANDALONE_PYTHON_INTERFACE)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
-  message(STATUS "[coal] Building nanobind-based Python bindings.")
   xxx_find_nanobind()
   xxx_find_package(nanoeigenpy CONFIG REQUIRED)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
-  message(STATUS "[coal] Building Boost.Python-based Python bindings.")
   xxx_find_package(eigenpy 2.9.2 CONFIG REQUIRED)
 endif()
 
@@ -560,15 +564,6 @@ endif()
 
 xxx_generate_package_module_files()
 
-if(COAL_BUILD_DOCUMENTATION)
-  add_subdirectory(doc)
-endif()
-
-if(COAL_BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(test)
-endif()
-
 if(BUILD_PYTHON_INTERFACE)
   add_custom_target(coal_python)
   set_target_properties(
@@ -578,11 +573,22 @@ if(BUILD_PYTHON_INTERFACE)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
+  message(STATUS "[coal] Building nanobind-based Python bindings.")
   add_subdirectory(python-nb)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
+  message(STATUS "[coal] Building Boost.Python-based Python bindings.")
   add_subdirectory(python)
+endif()
+
+if(COAL_BUILD_DOCUMENTATION)
+  add_subdirectory(doc)
+endif()
+
+if(COAL_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(test)
 endif()
 
 xxx_print_dependency_summary()

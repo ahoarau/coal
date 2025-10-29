@@ -1,23 +1,5 @@
 # Copyright 2025 INRIA
 
-# Detect the installed nanobind package and import it into CMake
-execute_process(
-  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-  OUTPUT_VARIABLE nanobind_ROOT
-)
-# Honor nanobind_ROOT
-cmake_policy(PUSH)
-cmake_policy(SET CMP0074 NEW)
-find_package(nanobind CONFIG REQUIRED)
-cmake_policy(POP)
-find_package(Boost REQUIRED)
-
-# Nanoeigenpy
-find_package(nanoeigenpy CONFIG REQUIRED)
-
-set(PYTHON_LIB_NAME_V2 ${PROJECT_NAME}_pywrap_nb)
-
 # Headers
 set(
   PYTHON_LIB_HEADERS
@@ -46,56 +28,87 @@ set(
 )
 if(COAL_HAS_OCTOMAP)
   list(APPEND PYTHON_LIB_SOURCES octree.cc)
-endif(COAL_HAS_OCTOMAP)
+endif()
 
-nanobind_add_module(${PYTHON_LIB_NAME_V2} NB_STATIC LTO NB_SUPPRESS_WARNINGS ${PYTHON_LIB_SOURCES})
+nanobind_add_module(coal_pywrap_nb NB_STATIC LTO NB_SUPPRESS_WARNINGS ${PYTHON_LIB_SOURCES})
+install(TARGETS coal_pywrap_nb 
+  EXPORT coal-coal 
+  LIBRARY DESTINATION ${Python_SITELIB}/coal
+)
 target_link_libraries(
-  ${PYTHON_LIB_NAME_V2}
-  PRIVATE ${PROJECT_NAME}::${PROJECT_NAME} Boost::boost
+  coal_pywrap_nb
+  PRIVATE coal Boost::boost
 )
 target_compile_definitions(
-  ${PYTHON_LIB_NAME_V2}
-  PRIVATE COAL_PYTHON_LIBNAME=${PYTHON_LIB_NAME_V2}
+  coal_pywrap_nb
+  PRIVATE COAL_PYTHON_LIBNAME=coal_pywrap_nb
 )
-
-set(MODULE_DIR ${PROJECT_NAME})
 
 set_target_properties(
-  ${PYTHON_LIB_NAME_V2}
+  coal_pywrap_nb
   PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_DIR}"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/coal
 )
-
-set(PYTHON_LIB_STUB_FILE ${MODULE_DIR}/${PYTHON_LIB_NAME_V2}.pyi)
 
 nanobind_add_stub(
-  ${PYTHON_LIB_NAME_V2}_stub
+  coal_pywrap_nb_stub
   VERBOSE
-  MODULE ${PROJECT_NAME}.${PYTHON_LIB_NAME_V2}
-  OUTPUT ${PYTHON_LIB_STUB_FILE}
-  DEPENDS ${PYTHON_LIB_NAME_V2}
-  PYTHON_PATH ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_DIR}
+  MODULE coal
+  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/coal/coal_pywrap_nb.pyi
+  PYTHON_PATH $<TARGET_FILE_DIR:coal_pywrap_nb>
+  DEPENDS coal_pywrap_nb
 )
-add_dependencies(${PROJECT_NAME}_python ${PYTHON_LIB_NAME_V2})
-ADD_SOURCE_GROUP(PYTHON_LIB_SOURCES)
-
-set(PYTHON_FILES __init__.py windows_dll_manager.py)
-foreach(pyfile ${PYTHON_FILES})
-  message(STATUS "Building python file ${pyfile}")
-  PYTHON_BUILD(${MODULE_DIR} ${pyfile})
-  install(
-    FILES ${MODULE_DIR}/${pyfile}
-    DESTINATION ${Python_SITELIB}/${MODULE_DIR}
-  )
-endforeach(pyfile)
-
 install(
-  TARGETS ${PYTHON_LIB_NAME_V2}
-  EXPORT ${TARGETS_EXPORT_NAME}
-  LIBRARY DESTINATION ${Python_SITELIB}/${MODULE_DIR}
+  FILES coal/coal_pywrap_nb.pyi
+  DESTINATION ${Python_SITELIB}/coal
+)
+add_dependencies(coal_python coal_pywrap_nb)
+
+function(xxx_python_compile_file)
+    set(options)
+    set(oneValueArgs INPUT GEN_DIR DESTINATION)
+    set(multiValueArgs)
+    cmake_parse_arguments(PARSE_ARGV 0 arg "${options}" "${oneValueArgs}" "${multiValueArgs}")
+
+    xxx_require_variable(Python_EXECUTABLE)
+
+    xxx_require_variable(arg_INPUT)
+    xxx_require_variable(arg_GEN_DIR)
+    xxx_require_variable(arg_DESTINATION)
+
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} -c "import py_compile; print(py_compile.compile(r'${arg_INPUT}', doraise=True), end='')"
+        OUTPUT_VARIABLE compiled_file
+        RESULT_VARIABLE result
+    )
+
+    message(STATUS "Compiled Python file '${arg_INPUT}' to '${compiled_file}'")
+    cmake_path(CONVERT ${compiled_file} TO_CMAKE_PATH_LIST compiled_file NORMALIZE)
+    cmake_path(GET compiled_file FILENAME output_filename)
+
+    if(NOT result EQUAL 0)
+        message(FATAL_ERROR "Failed to compile Python file '${arg_INPUT}'")
+    endif()
+
+    file(COPY ${arg_INPUT} DESTINATION ${arg_GEN_DIR})
+    file(COPY ${compiled_file} DESTINATION ${arg_GEN_DIR}/__pycache__)
+    set_source_files_properties(${compiled_file} PROPERTIES GENERATED True)
+
+    install(
+      FILES ${compiled_file}
+      DESTINATION ${arg_DESTINATION}
+    )
+endfunction()
+
+
+xxx_python_compile_file(
+  INPUT ${CMAKE_CURRENT_SOURCE_DIR}/coal/__init__.py
+  GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/coal
+  DESTINATION ${Python_SITELIB}/coal
 )
 
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/${PYTHON_LIB_STUB_FILE}
-  DESTINATION ${Python_SITELIB}/${MODULE_DIR}
+xxx_python_compile_file(
+  INPUT ${CMAKE_CURRENT_SOURCE_DIR}/coal/windows_dll_manager.py
+  GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/coal
+  DESTINATION ${Python_SITELIB}/coal
 )

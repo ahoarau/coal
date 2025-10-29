@@ -130,11 +130,13 @@ if(BUILD_PYTHON_INTERFACE AND BUILD_STANDALONE_PYTHON_INTERFACE)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
+  message(STATUS "[coal] Building nanobind-based Python bindings.")
   xxx_find_nanobind()
   xxx_find_package(nanoeigenpy CONFIG REQUIRED)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
+  message(STATUS "[coal] Building Boost.Python-based Python bindings.")
   xxx_find_package(eigenpy 2.9.2 CONFIG REQUIRED)
 endif()
 

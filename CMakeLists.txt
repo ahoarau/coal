@@ -591,5 +591,5 @@ if(COAL_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-xxx_print_dependency_summary()
-xxx_print_option_summary()
+xxx_print_dependencies_summary()
+xxx_print_options_summary()

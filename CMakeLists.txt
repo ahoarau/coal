@@ -558,12 +558,6 @@ if(COAL_BUILD_WITH_OCTOMAP)
   )
 endif()
 
-if(COAL_INSTALL_HEADERS)
-  xxx_install_headers()
-endif()
-
-xxx_generate_package_module_files()
-
 if(BUILD_PYTHON_INTERFACE)
   add_custom_target(coal_python)
   set_target_properties(
@@ -590,6 +584,8 @@ if(COAL_BUILD_TESTS)
   enable_testing()
   add_subdirectory(test)
 endif()
+
+xxx_install_project()
 
 xxx_print_dependencies_summary()
 xxx_print_options_summary()

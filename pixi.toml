@@ -104,11 +104,10 @@ configure = { cmd = [
   "-G",
   "Ninja",
   "-B",
-  "build",
+  "build/$COAL_BUILD_TYPE",
   "-S",
   ".",
-  # Don't use standard layout because it's not well implemented on Windows
-  "-DPYTHON_STANDARD_LAYOUT=OFF",
+  "-DCMAKE_UTILS_SOURCE_DIR=$CMAKE_UTILS_SOURCE_DIR",
   "--profiling-output=cmake-profiling.json",
   "--profiling-format=google-trace",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
@@ -123,7 +122,9 @@ configure = { cmd = [
   "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
   "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
 ] }
-build = { cmd = "cmake --build build/$COAL_BUILD_TYPE --target all", depends-on = ["configure"] }
+build = { cmd = "cmake --build build/$COAL_BUILD_TYPE", depends-on = [
+  "configure",
+] }
 clean = { cmd = "rm -rf build/$COAL_BUILD_TYPE" }
 test = { cmd = "ctest --test-dir build/$COAL_BUILD_TYPE --output-on-failure", depends-on = [
   "build",

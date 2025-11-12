@@ -29,42 +29,43 @@ if(COAL_HAS_OCTOMAP)
 endif()
 
 nanobind_add_module(coal_pywrap_nb NB_STATIC LTO NB_SUPPRESS_WARNINGS ${PYWRAP_SOURCES} ${PYWRAP_HEADERS})
-install(TARGETS coal_pywrap_nb 
-  EXPORT coal-coal 
-  LIBRARY DESTINATION ${Python_SITELIB}/coal
-)
+xxx_target_enforce_msvc_conformance(coal_pywrap_nb PRIVATE)
 target_link_libraries(
   coal_pywrap_nb
-  PRIVATE coal Boost::boost
+  PRIVATE coal
 )
-target_compile_definitions(
-  coal_pywrap_nb
-  PRIVATE COAL_PYTHON_LIBNAME=coal_pywrap_nb
-)
-
 set_target_properties(
   coal_pywrap_nb
   PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/coal
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal
+)
+
+xxx_python_generate_init_py(
+    coal_pywrap_nb
+    OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages/coal/__init__.py
 )
 
 nanobind_add_stub(
   coal_pywrap_nb_stub
   VERBOSE
   MODULE coal
-  OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/coal/coal_pywrap_nb.pyi
-  PYTHON_PATH $<TARGET_FILE_DIR:coal_pywrap_nb>
+  OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages/coal/coal_pywrap_nb.pyi
+  PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
   DEPENDS coal_pywrap_nb
-)
-install(
-  FILES coal/coal_pywrap_nb.pyi
-  DESTINATION ${Python_SITELIB}/coal
 )
 add_dependencies(coal_python coal_pywrap_nb)
 
+xxx_python_compile_all(
+  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
 
-xxx_python_compile_files(
-  FILES coal/__init__.py
-        coal/windows_dll_manager.py
-  GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}
+install(
+    DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/test_project_bp
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/site-packages
+    FILES_MATCHING 
+        PATTERN "*.py" 
+        PATTERN "*.pyc" 
+        PATTERN "*.typed" 
+        PATTERN "*.so" 
+        PATTERN "*.pyd"
 )

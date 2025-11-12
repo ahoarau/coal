@@ -3,13 +3,11 @@
 #
 cmake_minimum_required(VERSION 3.22...4.1)
 
-include(FetchContent)
-FetchContent_Declare(
-  cmake-utils
-  GIT_REPOSITORY https://github.com/ahoarau/cmake-utils.git
-  GIT_TAG main
-)
-FetchContent_MakeAvailable(cmake-utils)
+if(CMAKE_UTILS_SOURCE_DIR)
+  add_subdirectory(${CMAKE_UTILS_SOURCE_DIR} cmake-utils)
+else()
+  find_package(cmake-helpers 0.2.0 CONFIG REQUIRED)
+endif()
 
 project(
   coal
@@ -18,13 +16,8 @@ project(
     "Coal, The Collision Detection Library. Previously known as HPP-FCL, fork of FCL -- The Flexible Collision Library"
   HOMEPAGE_URL "https://github.com/coal-library/coal"
 )
-xxx_include_ctest()
-include(CMakeDependentOption)
-xxx_configure_default_build_type(Release)
-xxx_configure_default_install_prefix(${CMAKE_CURRENT_BINARY_DIR}/tmp-install)
-xxx_configure_default_binary_dirs()
-xxx_configure_default_install_dirs()
-xxx_configure_apple_rpath()
+
+xxx_configure_defaults()
 
 # ----------------------------------------------------
 # --- OPTIONS  ---------------------------------------
@@ -104,7 +97,7 @@ endif()
 # --- Dependencies  ----------------------------------
 # ----------------------------------------------------
 
-xxx_find_package(Eigen3 3.4.0 CONFIG REQUIRED)
+xxx_find_package(Eigen3 CONFIG REQUIRED)
 
 xxx_find_package(Boost CONFIG REQUIRED COMPONENTS serialization filesystem)
 
@@ -136,7 +129,8 @@ if(BUILD_PYTHON_INTERFACE AND BUILD_STANDALONE_PYTHON_INTERFACE)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
-  xxx_find_nanobind()
+  xxx_find_python(3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+  xxx_find_nanobind(CONFIG REQUIRED)
   xxx_find_package(nanoeigenpy CONFIG REQUIRED)
 endif()
 
@@ -149,13 +143,6 @@ endif()
 add_library(coal SHARED)
 xxx_target_enforce_msvc_conformance(coal PRIVATE)
 target_compile_features(coal PUBLIC cxx_std_17)
-
-if(WIN32)
-  # There is an issue with MSVC 2017 and Eigen (due to std::aligned_storage).
-  # See https://github.com/ceres-solver/ceres-solver/issues/481
-  target_compile_definitions(coal PRIVATE _ENABLE_EXTENDED_ALIGNED_STORAGE)
-  target_compile_definitions(coal PUBLIC NOMINMAX)
-endif()
 
 target_compile_definitions(
   coal
@@ -271,7 +258,6 @@ target_sources(
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:src/octree.cpp>
 )
 
-xxx_declare_component(TARGETS coal COMPONENT coal)
 xxx_target_headers(coal PUBLIC
   HEADERS
     include/coal/collision_data.h
@@ -408,7 +394,6 @@ if(COAL_BUILD_WITH_OCTOMAP)
   )
 endif()
 
-
 add_library(coal-hpp-fcl-compatibility INTERFACE)
 target_link_libraries(coal-hpp-fcl-compatibility INTERFACE coal)
 target_include_directories(
@@ -417,7 +402,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-xxx_declare_component(TARGETS coal-hpp-fcl-compatibility COMPONENT coal-hpp-fcl-compatibility)
+
 xxx_target_headers(coal-hpp-fcl-compatibility PUBLIC
   HEADERS
     include/hpp/fcl/broadphase/broadphase_bruteforce.h
@@ -585,7 +570,10 @@ if(COAL_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-xxx_install_project()
+
+xxx_add_export_component(TARGETS coal NAME coal)
+xxx_add_export_component(TARGETS coal-hpp-fcl-compatibility NAME coal-hpp-fcl-compatibility)
+xxx_export_package()
 
 xxx_print_dependencies_summary()
 xxx_print_options_summary()

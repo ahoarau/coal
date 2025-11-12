@@ -144,6 +144,13 @@ add_library(coal SHARED)
 xxx_target_enforce_msvc_conformance(coal PRIVATE)
 target_compile_features(coal PUBLIC cxx_std_17)
 
+if(WIN32)
+  # There is an issue with MSVC 2017-2022 and Eigen (due to std::aligned_storage).
+  # See https://github.com/ceres-solver/ceres-solver/issues/481
+  target_compile_definitions(coal PRIVATE _ENABLE_EXTENDED_ALIGNED_STORAGE)
+  target_compile_definitions(coal PUBLIC NOMINMAX)
+endif()
+
 target_compile_definitions(
   coal
   PUBLIC

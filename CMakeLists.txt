@@ -138,6 +138,10 @@ if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
   xxx_find_package(eigenpy 2.9.2 CONFIG REQUIRED)
 endif()
 
+if(BUILD_PYTHON_INTERFACE AND COAL_BUILD_TESTS)
+  xxx_find_package(Pytest REQUIRED)
+endif()
+
 # ----------------------------------------------------
 
 add_library(coal SHARED)

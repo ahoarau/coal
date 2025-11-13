@@ -1,9 +1,6 @@
-import unittest
-from test_case import TestCase
+from utils import TestCase
 import coal
-
 import numpy as np
-
 
 class TestMainAPI(TestCase):
     def test_collision(self):
@@ -25,7 +22,6 @@ class TestMainAPI(TestCase):
         res = coal.DistanceResult()
 
         self.assertTrue(coal.distance(capsule, M1, capsule, M2, req, res) > 0)
-
 
 if __name__ == "__main__":
     unittest.main()

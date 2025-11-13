@@ -1,10 +1,7 @@
-import unittest
-from test_case import TestCase
+from utils import TestCase
 import coal
-
-import pickle
 import numpy as np
-
+import pickle
 
 def tetahedron():
     pts = coal.StdVec_Vec3s()

@@ -1,22 +1,27 @@
+if(COAL_PYTHON_NANOBIND)
+  set(coal_python_bindings coal_pywrap_nb)
+else()
+  set(coal_python_bindings coal_pywrap)
+endif()
+
 function(coal_python_add_test name)
   set(test_name "coal: Python ${name}")
-  set(source "test_${name}.py")
   add_test(
     NAME ${test_name}
-    COMMAND $<TARGET_FILE:Pytest::Pytest> ${CMAKE_CURRENT_SOURCE_DIR}/${source}
+    COMMAND $<TARGET_FILE:Pytest::Pytest> ${CMAKE_CURRENT_SOURCE_DIR}/test_${name}.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   )
   set_tests_properties(
     ${test_name}
     PROPERTIES
-      ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}:${CMAKE_BINARY_DIR}/lib/site-packages"
-      DEPENDS coal
+      ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib/site-packages"
+      LABELS "python"
+      DEPENDS ${coal_python_bindings}
   )
 endfunction()
 
 coal_python_add_test(api)
-coal_python_add_test(test_case)
-coal_python_add_test(test_collision_manager)
-coal_python_add_test(test_collision)
-coal_python_add_test(test_geometric_shapes)
-coal_python_add_test(test_pickling)
+coal_python_add_test(collision_manager)
+coal_python_add_test(collision)
+coal_python_add_test(geometric_shapes)
+coal_python_add_test(pickling)

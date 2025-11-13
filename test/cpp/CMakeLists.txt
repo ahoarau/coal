@@ -1,5 +1,3 @@
-project(coal-tests-cpp)
-
 add_library(coal-utility STATIC utility.cpp)
 target_link_libraries(coal-utility PUBLIC coal)
 target_include_directories(coal-utility PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

@@ -45,7 +45,7 @@ set(
   broadphase/broadphase.cc
 )
 
-if(COAL_HAS_OCTOMAP)
+if(COAL_BUILD_WITH_OCTOMAP)
   list(APPEND coal_pywrap_SOURCES octree.cc)
 endif()
 

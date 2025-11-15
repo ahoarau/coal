@@ -70,18 +70,18 @@ boostpy_add_stubs(
 )
 add_dependencies(coal_python coal_pywrap)
 
-xxx_python_compile_all(DIRECTORY 
+xxx_python_compile_all(DIRECTORY
     ${CMAKE_BINARY_DIR}/lib/site-packages/coal
     VERBOSE
 )
 
 install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal ${CMAKE_CURRENT_SOURCE_DIR}/coal
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/site-packages
-    FILES_MATCHING 
-        PATTERN "*.py" 
-        PATTERN "*.pyc" 
-        PATTERN "*.typed" 
-        PATTERN "*.so" 
-        PATTERN "*.pyd"
+  DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal ${CMAKE_CURRENT_SOURCE_DIR}/coal
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/site-packages
+  FILES_MATCHING
+  PATTERN "*.py"
+  PATTERN "*.pyc"
+  PATTERN "*.typed"
+  PATTERN "*.so"
+  PATTERN "*.pyd"
 )

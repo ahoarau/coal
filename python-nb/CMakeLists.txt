@@ -1,7 +1,5 @@
-# Copyright 2025 INRIA
-
 set(
-  PYWRAP_HEADERS
+  coal_pywrap_nb_HEADERS
   broadphase/broadphase_callbacks_collision_manager.hh
   fwd.h
   pickle.hh
@@ -9,7 +7,7 @@ set(
 )
 
 set(
-  PYWRAP_SOURCES
+  coal_wrap_nb_SOURCES
   broadphase/broadphase.cc
   aabb.cc
   bvh.cc
@@ -25,20 +23,13 @@ set(
   module.cc
 )
 if(COAL_HAS_OCTOMAP)
-  list(APPEND PYWRAP_SOURCES octree.cc)
+  list(APPEND coal_wrap_nb_SOURCES octree.cc)
 endif()
 
-nanobind_add_module(coal_pywrap_nb NB_STATIC LTO NB_SUPPRESS_WARNINGS ${PYWRAP_SOURCES} ${PYWRAP_HEADERS})
+nanobind_add_module(coal_pywrap_nb NB_STATIC LTO NB_SUPPRESS_WARNINGS ${coal_wrap_nb_SOURCES} ${coal_pywrap_nb_HEADERS})
 xxx_target_enforce_msvc_conformance(coal_pywrap_nb PRIVATE)
-target_link_libraries(
-  coal_pywrap_nb
-  PRIVATE coal
-)
-set_target_properties(
-  coal_pywrap_nb
-  PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal
-)
+target_link_libraries(coal_pywrap_nb PRIVATE coal)
+xxx_target_set_output_directory(coal_pywrap_nb ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
 
 xxx_python_generate_init_py(
     coal_pywrap_nb
@@ -47,8 +38,7 @@ xxx_python_generate_init_py(
 
 nanobind_add_stub(
   coal_pywrap_nb_stub
-  VERBOSE
-  MODULE coal
+  MODULE coal.coal_pywrap_nb
   OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages/coal/coal_pywrap_nb.pyi
   PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
   DEPENDS coal_pywrap_nb
@@ -60,12 +50,12 @@ xxx_python_compile_all(
 )
 
 install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/test_project_bp
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/site-packages
-    FILES_MATCHING 
-        PATTERN "*.py" 
-        PATTERN "*.pyc" 
-        PATTERN "*.typed" 
-        PATTERN "*.so" 
-        PATTERN "*.pyd"
+  DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/site-packages
+  FILES_MATCHING
+  PATTERN "*.py"
+  PATTERN "*.pyc"
+  PATTERN "*.typed"
+  PATTERN "*.so"
+  PATTERN "*.pyd"
 )

@@ -55,6 +55,11 @@ target_link_libraries(coal_pywrap PRIVATE eigenpy::eigenpy coal)
 xxx_target_set_default_compile_options(coal_pywrap PRIVATE)
 xxx_target_set_output_directory(coal_pywrap ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
 
+target_compile_definitions(
+  coal_pywrap
+  PRIVATE $<$<BOOL:${ENABLE_DOXYGEN_AUTODOC}>:COAL_HAS_DOXYGEN_AUTODOC>
+)
+
 xxx_python_generate_init_py(
     coal_pywrap
     OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages/coal/__init__.py

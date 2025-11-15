@@ -31,7 +31,13 @@ xxx_cmake_dependent_option(
   COAL_INSTALL_DOCUMENTATION
   OFF
 )
-
+xxx_cmake_dependent_option(
+  ENABLE_PYTHON_DOXYGEN_AUTODOC
+  "Enable automatic documentation of Python bindings from Doxygen documentation"
+  ON
+  COAL_BUILD_DOCUMENTATION
+  OFF
+)
 xxx_option(COAL_BUILD_TESTS "Build the tests" OFF)
 xxx_option(SUFFIX_SO_VERSION "Suffix library name with its version" OFF)
 xxx_option(
@@ -111,7 +117,6 @@ if(COAL_BUILD_WITH_TRACY)
   xxx_find_package(Tracy CONFIG REQUIRED)
 endif()
 
-
 if(COAL_BUILD_WITH_OCTOMAP)
   xxx_find_package(octomap 1.8.0 CONFIG REQUIRED)
 endif()
@@ -135,11 +140,18 @@ if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
-  xxx_find_package(eigenpy 2.9.2 CONFIG REQUIRED)
+  xxx_find_python(3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+  xxx_find_package(Boost CONFIG REQUIRED COMPONENTS python)
+  xxx_find_package(eigenpy CONFIG REQUIRED)
 endif()
 
-if(BUILD_PYTHON_INTERFACE AND COAL_BUILD_TESTS)
-  xxx_find_package(Pytest REQUIRED)
+if(COAL_BUILD_DOCUMENTATION)
+  xxx_find_package(Doxygen REQUIRED COMPONENTS dot)
+endif()
+
+if(ENABLE_PYTHON_DOXYGEN_AUTODOC)
+  xxx_check_python_module(lxml REQUIRED)
+  xxx_check_python_module(pylatexenc REQUIRED)
 endif()
 
 # ----------------------------------------------------
@@ -164,17 +176,20 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:COAL_HAS_OCTOMAP>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
-    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_BUILD_WITH_LOGGING BOOST_LOG_DYN_LINK>
+    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_BUILD_WITH_LOGGING>
+    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:BOOST_LOG_DYN_LINK>
 )
 target_link_libraries(
   coal
   PUBLIC
     Eigen3::Eigen
-    Boost::serialization Boost::filesystem
+    Boost::serialization
+    Boost::filesystem
     assimp::assimp
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
-    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r Qhull::qhullcpp>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhullcpp>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:Tracy::TracyClient>
 )
 
@@ -556,10 +571,7 @@ endif()
 
 if(BUILD_PYTHON_INTERFACE)
   add_custom_target(coal_python)
-  set_target_properties(
-    coal_python
-    PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True
-  )
+  set_target_properties(coal_python PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
@@ -573,14 +585,15 @@ if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
 endif()
 
 if(COAL_BUILD_DOCUMENTATION)
+  message(STATUS "[coal] Building documentation.")
   add_subdirectory(doc)
 endif()
 
 if(COAL_BUILD_TESTS)
+  message(STATUS "[coal] Building tests.")
   enable_testing()
   add_subdirectory(test)
 endif()
-
 
 xxx_add_export_component(TARGETS coal NAME coal)
 xxx_add_export_component(TARGETS coal-hpp-fcl-compatibility NAME coal-hpp-fcl-compatibility)

@@ -26,7 +26,6 @@
 #include "coal/mesh_loader/assimp.h"
 #include "utility.h"
 
-
 using namespace coal;
 
 CollisionFunctionMatrix lookupTable;

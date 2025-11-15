@@ -1,8 +1,12 @@
-from utils import TestCase
+import unittest
 import coal
 import numpy as np
 
-class TestGeometricShapes(TestCase):
+
+class TestGeometricShapes(unittest.TestCase):
+    def assertApprox(self, a, b, epsilon=1e-6):
+        return self.assertTrue(np.allclose(a, b, epsilon), "%s !~= %s" % (a, b))
+
     def test_capsule(self):
         capsule = coal.Capsule(1.0, 2.0)
         self.assertIsInstance(capsule, coal.Capsule)

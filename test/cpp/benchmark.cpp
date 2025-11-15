@@ -23,7 +23,6 @@
 
 #include "utility.h"
 
-
 #define RUN_CASE(BV, tf, models, split) \
   run<BV>(tf, models, split, #BV " - " #split ":\t")
 

@@ -4,7 +4,10 @@ target_include_directories(coal-utility PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 function(coal_add_test test_name)
   add_executable(coal-test-${test_name} ${test_name}.cpp)
-  target_link_libraries(coal-test-${test_name} PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility coal-tests-resources)
+  target_link_libraries(
+    coal-test-${test_name}
+    PRIVATE Boost::filesystem Boost::unit_test_framework coal-utility coal-tests-resources
+  )
   xxx_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
 
   # OLD METHOD
@@ -64,8 +67,14 @@ coal_add_test(broadphase_collision_2)
 
 ## Profiling
 add_executable(coal-test-profiling profiling.cpp)
-target_link_libraries(coal-test-profiling PRIVATE coal-utility Boost::filesystem coal coal-tests-resources)
+target_link_libraries(
+  coal-test-profiling
+  PRIVATE coal-utility Boost::filesystem coal coal-tests-resources
+)
 
 ## Benchmark
 add_executable(coal-test-benchmark benchmark.cpp)
-target_link_libraries(coal-test-benchmark PRIVATE coal-utility Boost::filesystem coal coal-tests-resources)
+target_link_libraries(
+  coal-test-benchmark
+  PRIVATE coal-utility Boost::filesystem coal coal-tests-resources
+)

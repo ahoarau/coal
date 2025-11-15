@@ -152,7 +152,7 @@ jobs:
         pixi run -e ${{ matrix.environment }} configure \
           -DBUILD_PYTHON_INTERFACE=OFF \
           -B build_cpp
-        pixi run -e ${{ matrix.environment }} cmake --build build_cpp 
+        pixi run -e ${{ matrix.environment }} cmake --build build_cpp
         pixi run -e ${{ matrix.environment }} cmake --install build_cpp
 
     - name: Build Coal standalone python [MacOS/Linux/Windows]
@@ -164,7 +164,7 @@ jobs:
           -DBUILD_PYTHON_INTERFACE=ON \
           -DBUILD_STANDALONE_PYTHON_INTERFACE=ON \
           -B build_python
-        pixi run -e ${{ matrix.environment }} cmake --build build_python 
+        pixi run -e ${{ matrix.environment }} cmake --build build_python
         pixi run -e ${{ matrix.environment }} cmake --install build_python
         pixi run -e ${{ matrix.environment }} python -c "import coal"
 

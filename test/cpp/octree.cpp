@@ -50,7 +50,6 @@
 
 #include "utility.h"
 
-
 namespace utf = boost::unit_test::framework;
 
 using namespace coal;

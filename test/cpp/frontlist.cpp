@@ -44,7 +44,6 @@
 #include "coal/internal/BV_splitter.h"
 #include "utility.h"
 
-
 #include <boost/filesystem.hpp>
 
 using namespace coal;

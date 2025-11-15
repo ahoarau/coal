@@ -45,7 +45,6 @@
 #include "coal/distance.h"
 #include "utility.h"
 
-
 using coal::BVHModel;
 using coal::CollisionGeometryPtr_t;
 using coal::CollisionObject;

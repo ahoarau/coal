@@ -8,8 +8,7 @@ function(coal_python_add_test name)
   set(test_name "coal: Python ${name}")
   add_test(
     NAME ${test_name}
-    COMMAND $<TARGET_FILE:Pytest::Pytest> ${CMAKE_CURRENT_SOURCE_DIR}/test_${name}.py
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND $<TARGET_FILE:Python::Interpreter> ${CMAKE_CURRENT_SOURCE_DIR}/test_${name}.py
   )
   set_tests_properties(
     ${test_name}

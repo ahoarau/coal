@@ -39,8 +39,6 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
-
-
 #include "coal/collision.h"
 #include "coal/BVH/BVH_model.h"
 #include "coal/BVH/BVH_utility.h"

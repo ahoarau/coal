@@ -65,7 +65,6 @@ COAL_COMPILER_DIAGNOSTIC_IGNORED_DEPRECECATED_DECLARATIONS
 
 #include "utility.h"
 
-
 #include <boost/archive/tmpdir.hpp>
 #include <boost/filesystem.hpp>
 

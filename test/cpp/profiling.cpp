@@ -173,15 +173,16 @@ Geometry makeGeomFromParam(int& iarg, const int& argc, char** argv) {
   } else if (a == "-mesh") {
     CHECK_PARAM_NB(2, Mesh);
     LOG_COUT("Loading " << argv[iarg + 2] << " as BVHModel<" << argv[iarg + 1]
-                   << ">...");
+                        << ">...");
     if (strcmp(argv[iarg + 1], "obb") == 0) {
       o = meshToGeom<OBB>(argv[iarg + 2]);
       LOG_COUT("Mesh has " << dynamic_pointer_cast<BVHModel<OBB> >(o)->num_tris
-                      << " triangles");
+                           << " triangles");
       type = "mesh_obb";
     } else if (strcmp(argv[iarg + 1], "obbrss") == 0) {
       o = meshToGeom<OBBRSS>(argv[iarg + 2]);
-      LOG_COUT("Mesh has " << dynamic_pointer_cast<BVHModel<OBBRSS> >(o)->num_tris
+      LOG_COUT(
+          "Mesh has " << dynamic_pointer_cast<BVHModel<OBBRSS> >(o)->num_tris
                       << " triangles");
       type = "mesh_obbrss";
     } else
@@ -196,14 +197,14 @@ Geometry makeGeomFromParam(int& iarg, const int& argc, char** argv) {
           Vec3s(Scalar(atof(argv[iarg + 4])), Scalar(atof(argv[iarg + 5])),
                 Scalar(atof(argv[iarg + 6]))));
       LOG_COUT("Cropping " << aabb.min_.transpose() << " ---- "
-                      << aabb.max_.transpose() << " ...");
+                           << aabb.max_.transpose() << " ...");
       o->computeLocalAABB();
       LOG_COUT("Mesh AABB is " << o->aabb_local.min_.transpose() << " ---- "
-                          << o->aabb_local.max_.transpose() << " ...");
+                               << o->aabb_local.max_.transpose() << " ...");
       o.reset(extract(o.get(), Transform3s(), aabb));
       if (!o) throw std::invalid_argument("Failed to crop.");
       LOG_COUT("Crop has " << dynamic_pointer_cast<BVHModel<OBB> >(o)->num_tris
-                      << " triangles");
+                           << " triangles");
       iarg += 7;
     }
   } else if (a == "-capsule") {

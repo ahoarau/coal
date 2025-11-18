@@ -26,8 +26,7 @@ if(ENABLE_DOXYGEN_AUTODOC)
   add_dependencies(generate_doxygen_cpp_doc doc)
 
   list(
-    APPEND
-    coal_pywrap_HEADERS
+    APPEND coal_pywrap_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/doxygen_autodoc/doxygen_xml_parser_for_cmake.hh
   )
 endif()

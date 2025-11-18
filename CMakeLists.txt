@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.22...4.1)
 
 if(CMAKE_UTILS_SOURCE_DIR)
   add_subdirectory(${CMAKE_UTILS_SOURCE_DIR} cmake-utils)
+elseif(EXISTS $ENV{CMAKE_UTILS_SOURCE_DIR})
+  add_subdirectory($ENV{CMAKE_UTILS_SOURCE_DIR} cmake-utils)
 else()
   find_package(cmake-helpers 0.2.0 CONFIG REQUIRED)
 endif()
@@ -38,7 +40,8 @@ xxx_cmake_dependent_option(
   COAL_BUILD_DOCUMENTATION
   OFF
 )
-xxx_option(COAL_BUILD_TESTS "Build the tests" OFF)
+xxx_option(COAL_BUILD_TESTS "Build the tests" ON)
+xxx_option(COAL_BUILD_BENCHMARKS "Build the benchmarks" ON)
 xxx_option(SUFFIX_SO_VERSION "Suffix library name with its version" OFF)
 xxx_option(
   COAL_TURN_ASSERT_INTO_EXCEPTION

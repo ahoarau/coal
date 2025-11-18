@@ -13,7 +13,7 @@ function(coal_python_add_test name)
   set_tests_properties(
     ${test_name}
     PROPERTIES
-      ENVIRONMENT "PYTHONPATH=${CMAKE_BINARY_DIR}/lib/site-packages"
+      ENVIRONMENT "PYTHONPATH=$<TARGET_FILE_DIR:${coal_python_bindings}>/.."
       LABELS "python"
       DEPENDS ${coal_python_bindings}
   )

@@ -52,7 +52,7 @@ boostpy_add_module(coal_pywrap ${coal_pywrap_SOURCES} ${coal_pywrap_HEADERS})
 xxx_check_python_module_name(coal_pywrap)
 target_link_libraries(coal_pywrap PRIVATE eigenpy::eigenpy coal)
 xxx_target_set_default_compile_options(coal_pywrap PRIVATE)
-xxx_target_set_output_directory(coal_pywrap ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
+xxx_target_set_output_directory(coal_pywrap OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
 
 target_compile_definitions(
   coal_pywrap

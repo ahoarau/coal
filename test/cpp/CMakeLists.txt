@@ -7,7 +7,10 @@ function(coal_add_test test_name)
   xxx_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
 
   add_test(NAME coal-test-${test_name} COMMAND coal-test-${test_name})
-  set_tests_properties(coal-test-${test_name} PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  set_tests_properties(
+    coal-test-${test_name}
+    PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  )
   if(ARGN)
     set_tests_properties(coal-test-${test_name} PROPERTIES ${ARGN})
   endif()
@@ -55,4 +58,3 @@ coal_add_test(broadphase)
 coal_add_test(broadphase_dynamic_AABB_tree)
 coal_add_test(broadphase_collision_1)
 coal_add_test(broadphase_collision_2)
-

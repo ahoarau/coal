@@ -29,7 +29,7 @@ endif()
 nanobind_add_module(coal_pywrap_nb NB_STATIC LTO NB_SUPPRESS_WARNINGS ${coal_wrap_nb_SOURCES} ${coal_pywrap_nb_HEADERS})
 xxx_target_enforce_msvc_conformance(coal_pywrap_nb PRIVATE)
 target_link_libraries(coal_pywrap_nb PRIVATE coal)
-xxx_target_set_output_directory(coal_pywrap_nb ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
+xxx_target_set_output_directory(coal_pywrap_nb OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/site-packages/coal)
 
 xxx_python_generate_init_py(
     coal_pywrap_nb

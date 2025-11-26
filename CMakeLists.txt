@@ -354,6 +354,7 @@ xxx_target_headers(coal PUBLIC
     include/coal/contact_patch_func_matrix.h
     include/coal/contact_patch/contact_patch_solver.h
     include/coal/contact_patch/contact_patch_solver.hxx
+    include/coal/contact_patch/contact_patch_simplifier.h
     include/coal/distance.h
     include/coal/math/matrix_3f.h
     include/coal/math/vec_3f.h

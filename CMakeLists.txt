@@ -214,6 +214,7 @@ target_sources(
     src/collision.cpp
     src/contact_patch.cpp
     src/contact_patch/contact_patch_solver.cpp
+    src/contact_patch/contact_patch_simplifier.cpp
     src/contact_patch_func_matrix.cpp
     src/distance_func_matrix.cpp
     src/collision_data.cpp

@@ -21,6 +21,7 @@ eigen = ">=3.4.0"
 eigenpy = ">=3.7.0"
 numpy = ">=1.22.0"
 python = ">=3.9.0"
+python_abi = ">=3.9.0" # Development.Module
 doxygen = ">=1.13.2,<2"
 lxml = ">=5.3"
 pylatexenc = ">=2.10"

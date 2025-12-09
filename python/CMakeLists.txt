@@ -48,7 +48,7 @@ if(COAL_BUILD_WITH_OCTOMAP)
   list(APPEND coal_pywrap_SOURCES octree.cc)
 endif()
 
-boostpy_add_module(coal_pywrap ${coal_pywrap_SOURCES} ${coal_pywrap_HEADERS})
+xxx_boostpy_add_module(coal_pywrap ${coal_pywrap_SOURCES} ${coal_pywrap_HEADERS})
 xxx_check_python_module_name(coal_pywrap)
 target_link_libraries(coal_pywrap PRIVATE eigenpy::eigenpy coal)
 xxx_target_set_default_compile_options(coal_pywrap PRIVATE)
@@ -64,7 +64,7 @@ xxx_python_generate_init_py(
     OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages/coal/__init__.py
 )
 
-boostpy_add_stubs(
+xxx_boostpy_add_stubs(
     coal_pywrap_stubs
     MODULE coal.coal_pywrap
     OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages

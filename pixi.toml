@@ -18,13 +18,17 @@ git = ">=2.47.0"
 nanobind = ">=2.5.0,<3"
 libboost-devel = ">=1.80.0"
 eigen = ">=3.4.0"
-assimp = ">=5.4"
+eigenpy = ">=3.7.0"
 numpy = ">=1.22.0"
 python = ">=3.9.0"
-doxygen = ">=1.8"
+python_abi = ">=3.9.0"
+doxygen = ">=1.13.2,<2"
 lxml = ">=5.3"
 pylatexenc = ">=2.10"
 nanoeigenpy = ">=0.3.0"
+tracy-profiler = ">=0.7.7"
+assimp = ">=5.4"
+graphviz = ">=13.1.2,<14"
 
 [package]
 name = { workspace = true }
@@ -104,20 +108,33 @@ configure = { cmd = [
   "build",
   "-S",
   ".",
-  # Don't use standard layout because it's not well implemented on Windows
-  "-DPYTHON_STANDARD_LAYOUT=OFF",
-  "-DPython_EXECUTABLE=$PYTHON_EXECUTABLE",
+  "-DJRL_CMAKEMODULES_SOURCE_DIR=$JRL_CMAKEMODULES_SOURCE_DIR",
+  "--profiling-output=cmake-profiling.json",
+  "--profiling-format=google-trace",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
   "-DCMAKE_BUILD_TYPE=$COAL_BUILD_TYPE",
+  "-DBUILD_PYTHON_INTERFACE=ON",
   "-DGENERATE_PYTHON_STUBS=$COAL_PYTHON_STUBS",
-  "-DCOAL_HAS_QHULL=$COAL_HAS_QHULL",
   "-DCOAL_PYTHON_NANOBIND=$COAL_PYTHON_NANOBIND",
+  "-DCOAL_BUILD_TESTS=ON",
+  "-DCOAL_BUILD_WITH_LOGGING=ON",
+  "-DCOAL_BUILD_WITH_TRACY=OFF",
+  "-DCOAL_BUILD_DOCUMENTATION=ON",
+  "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
+  "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
 ] }
-build = { cmd = "cmake --build build --target all", depends-on = ["configure"] }
+build = { cmd = "cmake --build build", depends-on = ["configure"] }
 clean = { cmd = "rm -rf build" }
 test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = [
   "build",
 ] }
+install = { cmd = "cmake --build build --target install", depends-on = [
+  "build",
+] }
+
+[tasks.test-packaging]
+depends-on = ["install"]
+cmd = "cmake -G Ninja -S test/packaging/cmake -B build/test-packaging -DCMAKE_VERBOSE_MAKEFILE=1 && cmake --build build/test-packaging && build/test-packaging/coal_test_packaging"
 
 [feature.lint]
 dependencies = { pre-commit = ">=3.6.2" }
@@ -153,10 +170,10 @@ release-new-version = { cmd = "VERSION=$COAL_VERSION cmake --build build_new_ver
 # QHull support
 [feature.qhull.target.win]
 dependencies = { qhull = ">=2020.2" }
-activation = { env = { COAL_HAS_QHULL = "ON" } }
+activation = { env = { COAL_BUILD_WITH_QHULL = "ON" } }
 [feature.qhull.target.unix]
 dependencies = { qhull = ">=2020.2", qhull-static = ">=2020.2" }
-activation = { env = { COAL_HAS_QHULL = "ON" } }
+activation = { env = { COAL_BUILD_WITH_QHULL = "ON" } }
 
 # Legacy Python bindings
 [feature.boost-python]
@@ -166,6 +183,11 @@ activation.env = { COAL_PYTHON_NANOBIND = "OFF" }
 # Octomap support
 [feature.octomap]
 dependencies = { octomap = ">=1.10" }
+activation = { env = { COAL_BUILD_WITH_OCTOMAP = "ON" } }
+
+# Boost Logging support
+[feature.logging]
+activation = { env = { COAL_BUILD_WITH_LOGGING = "ON" } }
 
 [feature.python-latest.dependencies]
 python = "3.14.*"
@@ -212,23 +234,27 @@ octomap = { features = [
 ], solve-group = "python-latest" }
 python-oldest = { features = ["python-oldest"], solve-group = "python-oldest" }
 all = { features = [
+  "logging",
   "qhull",
   "octomap",
   "python-latest",
 ], solve-group = "python-latest" }
 # No solve-group, because boost.python will be legacy
 all-boost-python = { features = [
+  "logging",
   "qhull",
   "octomap",
   "python-latest",
   "boost-python",
 ] }
 all-python-oldest = { features = [
+  "logging",
   "qhull",
   "octomap",
   "python-oldest",
 ], solve-group = "python-oldest" }
 all-clang-cl = { features = [
+  "logging",
   "qhull",
   "octomap",
   "clang-cl",
@@ -236,9 +262,10 @@ all-clang-cl = { features = [
 ], solve-group = "python-latest" }
 # Release a new software version
 new-version = { features = [
-  "new-version",
+  "logging",
   "qhull",
   "octomap",
+  "new-version",
   "python-latest",
 ], solve-group = "python-latest" }
 test-pixi-build = { features = ["test-pixi-build"], no-default-feature = true }

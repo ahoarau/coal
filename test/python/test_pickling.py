@@ -1,9 +1,7 @@
 import unittest
-from test_case import TestCase
 import coal
-
-import pickle
 import numpy as np
+import pickle
 
 
 def tetahedron():
@@ -20,7 +18,7 @@ def tetahedron():
     return coal.Convex(pts, tri)
 
 
-class TestGeometryPickling(TestCase):
+class TestGeometryPickling(unittest.TestCase):
     def pickling(self, obj):
         with open("save.p", "wb") as f:
             pickle.dump(obj, f)

@@ -1,7 +1,5 @@
 import unittest
-from test_case import TestCase
 import coal
-
 import numpy as np
 
 
@@ -19,7 +17,7 @@ def tetahedron():
     return coal.Convex(pts, tri)
 
 
-class TestMainAPI(TestCase):
+class TestMainAPI(unittest.TestCase):
     def test_convex_halfspace(self):
         convex = tetahedron()
         halfspace = coal.Halfspace(np.array((0, 0, 1)), 0)

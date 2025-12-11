@@ -10,10 +10,7 @@ set(DOXYGEN_EXCLUDE "${PROJECT_SOURCE_DIR}/include/hpp/")
 # This create a build issue when building the bindings because doxygen-autodoc will
 # include octree.h that will include octomap.h.
 if(NOT COAL_HAS_OCTOMAP)
-  set(
-    DOXYGEN_EXCLUDE
-    "${DOXYGEN_EXCLUDE} ${PROJECT_SOURCE_DIR}/include/coal/octree.h"
-  )
+  set(DOXYGEN_EXCLUDE "${DOXYGEN_EXCLUDE} ${PROJECT_SOURCE_DIR}/include/coal/octree.h")
   set(
     DOXYGEN_EXCLUDE
     "${DOXYGEN_EXCLUDE} ${PROJECT_SOURCE_DIR}/include/coal/serialization/octree.h"

@@ -64,7 +64,6 @@ COAL_COMPILER_DIAGNOSTIC_POP
 
 #include "coal/timings.h"
 
-#include "fcl_resources/config.h"
 #include "utility.h"
 
 using namespace coal;

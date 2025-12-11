@@ -1,10 +1,14 @@
 build*/
-Xcode/*
-*~
-*.pyc
+install*/
+.pytest_cache/
 .cache/
+.pixi/
 __pycache__/
-
-# pixi environments
-.pixi
+Xcode*
+*.pyc
+*~
 *.egg-info
+.ruff_cache
+.DS_Store
+compile_commands.json
+cmake-profiling.json

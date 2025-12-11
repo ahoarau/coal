@@ -38,8 +38,6 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
-#include "fcl_resources/config.h"
-
 #include "coal/collision.h"
 #include "coal/hfield.h"
 #include "coal/math/transform.h"

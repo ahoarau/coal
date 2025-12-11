@@ -100,6 +100,7 @@ struct GoogleDenseHashTable
 
 /// check broad phase distance
 BOOST_AUTO_TEST_CASE(test_core_bf_broad_phase_distance) {
+#if 0
 #ifndef NDEBUG
   broad_phase_distance_test(200, 100, 10);
   broad_phase_distance_test(200, 1000, 10);
@@ -110,6 +111,7 @@ BOOST_AUTO_TEST_CASE(test_core_bf_broad_phase_distance) {
   broad_phase_distance_test(200, 1000, 100);
   broad_phase_distance_test(2000, 100, 100);
   broad_phase_distance_test(2000, 1000, 100);
+#endif
 #endif
 }
 

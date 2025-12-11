@@ -1,11 +1,9 @@
 import unittest
-from test_case import TestCase
 import coal
-
 import numpy as np
 
 
-class TestMainAPI(TestCase):
+class TestMainAPI(unittest.TestCase):
     def test_collision(self):
         capsule = coal.Capsule(1.0, 2.0)
         M1 = coal.Transform3s()

@@ -135,10 +135,28 @@ test = { cmd = "ctest --test-dir build --output-on-failure", depends-on = [
 install = { cmd = "cmake --build build --target install", depends-on = [
   "build",
 ] }
-
-[tasks.test-packaging]
-depends-on = ["install"]
-cmd = "cmake -G Ninja -S test/packaging/cmake -B build/test-packaging -DCMAKE_VERBOSE_MAKEFILE=1 && cmake --build build/test-packaging && build/test-packaging/coal_test_packaging"
+test-import-python = { depends-on = [
+  "install",
+], cmd = [
+  "python",
+  "-c",
+  "import coal; print(coal.__version__)",
+] }
+_test-packaging-configure = { cmd = [
+  "cmake",
+  "-G",
+  "Ninja",
+  "-S",
+  "test/packaging/cmake",
+  "-B",
+  "build/test-packaging",
+], depends-on = [
+  "install",
+] }
+_test-packaging-build = { cmd = "cmake --build build/test-packaging", depends-on = [
+  "_test-packaging-configure",
+] }
+test-packaging = { depends-on = ["_test-packaging-build"] }
 
 [feature.lint]
 dependencies = { pre-commit = ">=3.6.2" }

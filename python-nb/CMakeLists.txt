@@ -22,7 +22,7 @@ set(
   shapes.cc
   module.cc
 )
-if(COAL_HAS_OCTOMAP)
+if(COAL_BUILD_WITH_OCTOMAP)
   list(APPEND coal_wrap_nb_SOURCES octree.cc)
 endif()
 

@@ -41,6 +41,8 @@ jobs:
       #CCACHE_DIR: /github/home/.ccache # Enable ccache
       BUILDER: colcon
       PRERELEASE: true
+      VERBOSE_OUTPUT: true
+      VERBOSE_TESTS: true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

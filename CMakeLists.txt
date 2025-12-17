@@ -120,7 +120,7 @@ if(COAL_BUILD_WITH_QHULL)
 endif()
 
 if(COAL_BUILD_TESTS)
-  jrl_find_package(Boost CONFIG REQUIRED COMPONENTS unit_test_framework)
+  jrl_find_package(Boost CONFIG REQUIRED COMPONENTS unit_test_framework math)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND BUILD_STANDALONE_PYTHON_INTERFACE)

@@ -13,14 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added `SUFFIX_SO_VERSION` CMake option, default `OFF` ([#770](https://github.com/coal-library/coal/pull/770))
 - Add pixi-build support ([#774](https://github.com/coal-library/coal/pull/774))
 - contact patches: add helpers to reduce the size of a contact patch by keeping points that minimize the difference between the area of the original patch and the area of the new patch
-  - handle the specific cases of n_desired = 1 or 2 ([805](https://github.com/coal-library/coal/pull/805))
-  - improve efficiency of ContactPatchSimplifierMaxArea and improve testing of patch simplifiers ([813](https://github.com/coal-library/coal/pull/813))
+- handle the specific cases of n_desired = 1 or 2 ([805](https://github.com/coal-library/coal/pull/805))
+- improve efficiency of ContactPatchSimplifierMaxArea and improve testing of patch simplifiers ([813](https://github.com/coal-library/coal/pull/813))
 - timings: + and += operators ([805](https://github.com/coal-library/coal/pull/805))
 - Add print methods for collision data (`Contact`, `CollisionRequest`, `CollisionResult`, `DistanceRequest`, `DistanceResult`, `ContactPatch`, `ContactPatchRequest` and `ContactPatchResult`) ([854](https://github.com/coal-library/coal/pull/854)).
   - One can now do `std::cout << contact` for example.
   - Added the `PrintableVisitor` in python bindings so that `print(contact)` works in python as well
 - Added `resolveReferences` method to `Contact` and `DistanceResult` to remap the `o1/o2` pointers (typically after serialization/deserialization) ([855](https://github.com/coal-library/coal/pull/855)).
 - Added copy constructors to `Contact::Contact(const Contact& other, const CollisionGeometry* new_o1, const CollisionGeometry* new_o2)` and `DistanceResult::DistanceResult(const DistanceResult& other, const CollisionGeometry* new_o1, const CollisionGeometry* new_o2)` to allow copying a `Contact` or `DistanceResult` while remapping the `o1/o2` pointers to new geometries. This is typically useful in the context of deep-copying ([#856](https://github.com/coal-library/coal/pull/820)).
+- Switch to [JRL CMake modules v2](https://github.com/jrl-umi3218/jrl-cmakemodules/pull/798) ([#28](https://github.com/Simple-Robotics/nanoeigenpy/pull/28))
 
 ### Removed
 - Remove direct dependency to ([#744](https://github.com/coal-library/coal/pull/744)):

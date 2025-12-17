@@ -34,7 +34,6 @@
 
 /** \author Florent Lamiraux <florent@laas.fr> */
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #define BOOST_TEST_MODULE COAL_BOX_BOX

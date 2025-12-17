@@ -36,7 +36,7 @@
 /** \author Jia Pan */
 
 #define BOOST_TEST_MODULE COAL_BROADPHASE
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include "coal/config.hh"
 #include "coal/broadphase/broadphase.h"

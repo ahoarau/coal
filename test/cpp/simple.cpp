@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE COAL_SIMPLE
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include "coal/internal/intersect.h"
 #include "coal/collision.h"

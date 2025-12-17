@@ -33,7 +33,6 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 
 #define BOOST_TEST_MODULE COAL_MATH

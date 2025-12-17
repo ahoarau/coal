@@ -34,7 +34,7 @@
 
 #define BOOST_TEST_MODULE COAL_SERIALIZATION
 #include <fstream>
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include "coal/fwd.hh"
 

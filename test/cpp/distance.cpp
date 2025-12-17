@@ -38,7 +38,7 @@
 #define BOOST_TEST_MODULE COAL_DISTANCE
 #include <chrono>
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
 #include "coal/internal/traversal_node_bvhs.h"

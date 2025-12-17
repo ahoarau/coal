@@ -35,7 +35,7 @@
 /** \author Justin Carpentier */
 
 #define BOOST_TEST_MODULE COAL_HEIGHT_FIELDS
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 
 #include "coal/collision.h"

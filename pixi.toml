@@ -35,23 +35,14 @@ name = { workspace = true }
 version = { workspace = true }
 
 [package.build]
-backend = { name = "pixi-build-cmake", version = "0.3.*" }
+backend = { name = "pixi-build-cmake", version = "*" }
 
 [package.build.config]
 extra-args = [
+  "-DBUILD_PYTHON_INTERFACE=ON",
   "-DGENERATE_PYTHON_STUBS=ON",
-  "-DBUILD_TESTING=OFF",
-  "-DCOAL_HAS_QHULL=ON",
-  "-DCOAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL=ON",
-  "-DCOAL_PYTHON_NANOBIND=OFF",
-]
-
-[package.build.target.win-64.config]
-extra-args = [
-  "-DPYTHON_SITELIB=%PREFIX%/Lib/site-packages",
-  "-DGENERATE_PYTHON_STUBS=ON",
-  "-DBUILD_TESTING=OFF",
-  "-DCOAL_HAS_QHULL=ON",
+  "-DCOAL_BUILD_TESTS=OFF",
+  "-DCOAL_BUILD_WITH_QHULL=ON",
   "-DCOAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL=ON",
   "-DCOAL_PYTHON_NANOBIND=OFF",
 ]
@@ -241,7 +232,7 @@ dependencies = { clangxx = "*" }
 
 # [feature.test-pixi-build.tasks]
 # test-cmake = "cmake -S test/pixi_build -B build_test_pixi_build"
-# test-python = "python -c 'import coal'"
+# test-python = "python -c 'import coal; print(coal.__version__)'"
 # test = { depends-on = ["test-cmake", "test-python"] }
 
 [environments]

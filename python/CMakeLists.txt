@@ -64,15 +64,16 @@ jrl_python_generate_init_py(
     OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages/coal/__init__.py
 )
 
-jrl_boostpy_add_stubs(
-    coal_pywrap_stubs
-    MODULE coal.coal_pywrap
-    OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages
-    PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
-    DEPENDS coal_pywrap
-    VERBOSE
-)
-add_dependencies(coal_python coal_pywrap)
+if(GENERATE_PYTHON_STUBS)
+  jrl_boostpy_add_stubs(
+      coal_pywrap_stubs
+      MODULE coal.coal_pywrap
+      OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages
+      PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
+      DEPENDS coal_pywrap
+      VERBOSE
+  )
+endif()
 
 jrl_python_compile_all(DIRECTORY
     ${CMAKE_BINARY_DIR}/lib/site-packages/coal

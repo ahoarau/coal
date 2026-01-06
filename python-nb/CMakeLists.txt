@@ -36,14 +36,15 @@ jrl_python_generate_init_py(
     OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages/coal/__init__.py
 )
 
-nanobind_add_stub(
-  coal_pywrap_nb_stub
-  MODULE coal.coal_pywrap_nb
-  OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages/coal/coal_pywrap_nb.pyi
-  PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
-  DEPENDS coal_pywrap_nb
-)
-add_dependencies(coal_python coal_pywrap_nb)
+if(GENERATE_PYTHON_STUBS)
+  nanobind_add_stub(
+    coal_pywrap_nb_stub
+    MODULE coal.coal_pywrap_nb
+    OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages/coal/coal_pywrap_nb.pyi
+    PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
+    DEPENDS coal_pywrap_nb
+  )
+endif()
 
 jrl_python_compile_all(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

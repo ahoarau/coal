@@ -38,22 +38,16 @@ jobs:
           - {ROS_DISTRO: kilted}
           - {ROS_DISTRO: rolling}
     env:
-      #CCACHE_DIR: /github/home/.ccache # Enable ccache
       BUILDER: colcon
       PRERELEASE: true
       VERBOSE_OUTPUT: true
       VERBOSE_TESTS: true
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      ROS_DISTRO: ${{ matrix.env.ROS_DISTRO }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      # This step will fetch/store the directory used by ccache before/after the ci run
-      #- uses: actions/cache@v3
-      #  with:
-      #    path: ${{ env.CCACHE_DIR }}
-      #    key: ccache-${{ matrix.env.ROS_DISTRO }}-${{ matrix.env.ROS_REPO }}
-      # Run industrial_ci
-      - uses: 'ros-industrial/industrial_ci@ba2a3d0f830f8051b356711a8df2fedfc5d256cf'
-        env: ${{ matrix.env }}
+      - uses: 'ros-industrial/industrial_ci@eb3ea328ff056aa2435d5b3493e7e2929c310f8e'
 
   check:
     if: always()
@@ -62,7 +56,7 @@ jobs:
     needs:
     - CI
 
-    runs-on: Ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Decide whether the needed jobs succeeded or failed

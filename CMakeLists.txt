@@ -83,15 +83,14 @@ jrl_cmake_dependent_option(
   BUILD_PYTHON_INTERFACE
   OFF
 )
-if(NOT COAL_PYTHON_NANOBIND)
-  jrl_cmake_dependent_option(
-    GENERATE_PYTHON_STUBS
-    "Generate the Python stubs for the Python bindings (only for legacy Boost.Python bindings)"
-    OFF
-    BUILD_PYTHON_INTERFACE
-    OFF
-  )
-endif()
+
+jrl_cmake_dependent_option(
+  GENERATE_PYTHON_STUBS
+  "Generate the Python stubs for the Python bindings"
+  ON
+  BUILD_PYTHON_INTERFACE
+  OFF
+)
 
 # ----------------------------------------------------
 # --- Dependencies  ----------------------------------
@@ -563,11 +562,6 @@ if(COAL_BUILD_WITH_OCTOMAP)
       include/hpp/fcl/internal/traversal_node_octree.h
     BASE_DIRS include
   )
-endif()
-
-if(BUILD_PYTHON_INTERFACE)
-  add_custom_target(coal_python)
-  set_target_properties(coal_python PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD True)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)

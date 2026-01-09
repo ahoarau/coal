@@ -50,6 +50,7 @@ if(COAL_BUILD_WITH_OCTOMAP)
 endif()
 
 jrl_boostpy_add_module(coal_pywrap ${coal_pywrap_SOURCES} ${coal_pywrap_HEADERS})
+jrl_target_enforce_msvc_conformance(coal_pywrap PRIVATE)
 jrl_check_python_module_name(coal_pywrap)
 target_link_libraries(coal_pywrap PRIVATE eigenpy::eigenpy coal)
 jrl_target_set_default_compile_options(coal_pywrap PRIVATE)

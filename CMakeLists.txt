@@ -145,7 +145,7 @@ if(COAL_BUILD_DOCUMENTATION)
   jrl_find_package(Doxygen REQUIRED COMPONENTS dot)
 endif()
 
-if(ENABLE_PYTHON_DOXYGEN_AUTODOC)
+if(BUILD_PYTHON_INTERFACE AND ENABLE_PYTHON_DOXYGEN_AUTODOC)
   jrl_check_python_module(lxml REQUIRED)
   jrl_check_python_module(pylatexenc REQUIRED)
 endif()

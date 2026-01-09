@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.22...4.2)
+# Copyright 2025-2026 Inria
+# Copyright 2014-2025 CNRS-LAAS, Inria.
+
+cmake_minimum_required(VERSION 3.22)
 
 project(
   coal

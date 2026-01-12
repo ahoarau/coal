@@ -70,7 +70,7 @@ if(GENERATE_PYTHON_STUBS)
   jrl_boostpy_add_stubs(
       coal_pywrap_stubs
       MODULE coal.coal_pywrap
-      OUTPUT ${CMAKE_BINARY_DIR}/lib/site-packages
+      OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
       PYTHON_PATH ${CMAKE_BINARY_DIR}/lib/site-packages
       DEPENDS coal_pywrap
       VERBOSE

@@ -179,7 +179,6 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_BUILD_WITH_LOGGING>
-    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:BOOST_LOG_DYN_LINK>
 )
 target_link_libraries(
   coal

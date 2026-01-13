@@ -99,6 +99,8 @@ configure = { cmd = [
   "build",
   "-S",
   ".",
+  "-DCMAKE_C_COMPILER=$CC",
+  "-DCMAKE_CXX_COMPILER=$CXX",
   "-DJRL_CMAKEMODULES_SOURCE_DIR=$JRL_CMAKEMODULES_SOURCE_DIR",
   "-DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX",
   "-DCMAKE_BUILD_TYPE=$COAL_BUILD_TYPE",
@@ -106,8 +108,8 @@ configure = { cmd = [
   "-DGENERATE_PYTHON_STUBS=$COAL_PYTHON_STUBS",
   "-DCOAL_PYTHON_NANOBIND=$COAL_PYTHON_NANOBIND",
   "-DCOAL_BUILD_TESTS=ON",
-  "-DCOAL_BUILD_WITH_LOGGING=ON",
-  "-DCOAL_BUILD_WITH_TRACY=OFF",
+  "-DCOAL_BUILD_WITH_LOGGING=$COAL_BUILD_WITH_LOGGING",
+  "-DCOAL_BUILD_WITH_TRACY=$COAL_BUILD_WITH_TRACY",
   "-DCOAL_BUILD_DOCUMENTATION=ON",
   "-DCOAL_BUILD_WITH_OCTOMAP=$COAL_BUILD_WITH_OCTOMAP",
   "-DCOAL_BUILD_WITH_QHULL=$COAL_BUILD_WITH_QHULL",
@@ -196,6 +198,11 @@ activation = { env = { COAL_BUILD_WITH_OCTOMAP = "ON" } }
 [feature.logging]
 activation = { env = { COAL_BUILD_WITH_LOGGING = "ON" } }
 
+# Tracy support
+[feature.tracy]
+dependencies = { tracy-profiler = ">=0.7.7" }
+activation = { env = { COAL_BUILD_WITH_TRACY = "ON" } }
+
 [feature.python-latest.dependencies]
 python = "3.14.*"
 
@@ -216,11 +223,12 @@ dependencies = { clangxx = "*", lld = "*" }
 CC = "%CONDA_PREFIX%/Library/bin/clang-cl"
 CXX = "%CONDA_PREFIX%/Library/bin/clang-cl"
 
-# Use clang on GNU/Linux
 [feature.clang]
-platforms = ["linux-64"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
 activation = { env = { CC = "clang", CXX = "clang++" } }
-dependencies = { clangxx = "*" }
+dependencies = { clangxx = "*", lld = "*", llvm-tools = "*" }
+# NOTE: llvm-tools is only needed on windows to have llvm-ar (CMAKE_AR)
+# On linux, macOS clang++ provide "ar"
 
 [feature.test-pixi-build]
 dependencies = { coal = { path = "." }, cmake = ">=3.22", python = "*" }
@@ -242,6 +250,7 @@ octomap = { features = [
 python-oldest = { features = ["python-oldest"], solve-group = "python-oldest" }
 all = { features = [
   "logging",
+  "tracy",
   "qhull",
   "octomap",
   "python-latest",
@@ -256,12 +265,22 @@ all-boost-python = { features = [
 ] }
 all-python-oldest = { features = [
   "logging",
+  "tracy",
   "qhull",
   "octomap",
   "python-oldest",
 ], solve-group = "python-oldest" }
+all-clang = { features = [
+  "logging",
+  "tracy",
+  "qhull",
+  "octomap",
+  "clang",
+  "python-latest",
+], solve-group = "python-latest" }
 all-clang-cl = { features = [
   "logging",
+  "tracy",
   "qhull",
   "octomap",
   "clang-cl",

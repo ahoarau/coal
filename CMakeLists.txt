@@ -157,7 +157,21 @@ if(BUILD_PYTHON_INTERFACE AND ENABLE_PYTHON_DOXYGEN_AUTODOC)
 endif()
 
 # ----------------------------------------------------
+message(
+  "
 
+
+
+
+CMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+CMAKE_LINKER=${CMAKE_LINKER}
+CMAKE_AR=${CMAKE_AR}
+
+
+
+"
+)
 add_library(coal SHARED)
 jrl_target_enforce_msvc_conformance(coal PRIVATE)
 target_compile_features(coal PUBLIC cxx_std_17)
@@ -179,7 +193,6 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:COAL_HAS_QHULL>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_BUILD_WITH_LOGGING>
-    $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:BOOST_LOG_DYN_LINK>
 )
 target_link_libraries(
   coal

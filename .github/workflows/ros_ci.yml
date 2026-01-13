@@ -50,6 +50,7 @@ jobs:
           - ROS_DISTRO: rolling
             os: Ubuntu 24.04 (Noble)
     env:
+      CMAKE_ARGS: -DBUILD_PYTHON_INTERFACE=ON -DCOAL_BUILD_TESTS=ON -DCOAL_BUILD_BENCHMARKS=ON
       PRERELEASE: true
       VERBOSE_OUTPUT: true
       VERBOSE_TESTS: true
@@ -63,7 +64,7 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ matrix.ROS_DISTRO }}-${{github.run_id}}
           restore-keys: ccache-${{ matrix.ROS_DISTRO }}-
-      - uses: 'ros-industrial/industrial_ci@ba2a3d0f830f8051b356711a8df2fedfc5d256cf'
+      - uses: ros-industrial/industrial_ci@ba2a3d0f830f8051b356711a8df2fedfc5d256cf
 
   check:
     if: always()

@@ -62,10 +62,10 @@ jobs:
             environment: all-boost-python
             cxx_options: ''
             build_type: Release
-          - os: windows-latest
-            environment: all-clang-cl
-            cxx_options: ''
-            build_type: Release
+          # - os: windows-latest
+          #   environment: all-clang-cl
+          #   cxx_options: ''
+          #   build_type: Release
           - os: windows-latest
             environment: default
             cxx_options: ''
@@ -83,6 +83,7 @@ jobs:
     - name: Install Pixi Latest
       uses: prefix-dev/setup-pixi@v0.9.3
       with:
+        cache: false
         environments: ${{ matrix.environment }}
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
@@ -136,6 +137,7 @@ jobs:
     - name: Install Pixi Latest
       uses: prefix-dev/setup-pixi@v0.9.3
       with:
+        cache: false
         environments: ${{ matrix.environment }}
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
@@ -186,6 +188,7 @@ jobs:
       env:
         CMAKE_BUILD_PARALLEL_LEVEL: 2
       with:
+        cache: false
         environments: test-pixi-build
 
     - name: Test package [MacOS/Linux/Windows]

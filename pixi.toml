@@ -248,7 +248,6 @@ octomap = { features = [
 python-oldest = { features = ["python-oldest"], solve-group = "python-oldest" }
 all = { features = [
   "logging",
-  "tracy",
   "qhull",
   "octomap",
   "python-latest",
@@ -263,14 +262,12 @@ all-boost-python = { features = [
 ] }
 all-python-oldest = { features = [
   "logging",
-  "tracy",
   "qhull",
   "octomap",
   "python-oldest",
 ], solve-group = "python-oldest" }
 all-clang = { features = [
   "logging",
-  "tracy",
   "qhull",
   "octomap",
   "clang",
@@ -278,7 +275,6 @@ all-clang = { features = [
 ], solve-group = "python-latest" }
 all-clang-cl = { features = [
   "logging",
-  "tracy",
   "qhull",
   "octomap",
   "clang-cl",

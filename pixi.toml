@@ -26,7 +26,6 @@ doxygen = ">=1.13.2,<2"
 lxml = ">=5.3"
 pylatexenc = ">=2.10"
 nanoeigenpy = ">=0.3.0"
-tracy-profiler = ">=0.7.7"
 assimp = ">=5.4"
 graphviz = ">=13.1.2,<14"
 
@@ -71,11 +70,11 @@ qhull = ">=2020.2"
 qhull = ">=2020.2"
 qhull-static = ">=2020.2"
 
-# [target.unix.activation]
-# scripts = ["development/scripts/pixi/activation.sh"]
+[target.unix.activation]
+scripts = ["development/scripts/pixi/activation.sh"]
 
-# [target.win-64.activation]
-# scripts = ["development/scripts/pixi/activation.bat"]
+[target.win-64.activation]
+scripts = ["development/scripts/pixi/activation.bat"]
 
 [activation.env]
 # Setup ccache

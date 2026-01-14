@@ -182,14 +182,22 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_ENABLE_LOGGING>
 )
 
-set_property(TARGET Boost::atomic PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::thread PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::unit_test_framework PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::chrono PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::filesystem PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::system PROPERTY INTERFACE_COMPILE_DEFINITIONS)
+function(clear_interface_compile_definitions target)
+  if(NOT TARGET ${target})
+    return()
+  endif()
+
+  set_property(TARGET ${target} PROPERTY INTERFACE_COMPILE_DEFINITIONS)
+endfunction()
+
+clear_interface_compile_definitions(Boost::atomic)
+clear_interface_compile_definitions(Boost::thread)
+clear_interface_compile_definitions(Boost::unit_test_framework)
+clear_interface_compile_definitions(Boost::chrono)
+clear_interface_compile_definitions(Boost::filesystem)
+clear_interface_compile_definitions(Boost::log)
+clear_interface_compile_definitions(Boost::serialization)
+clear_interface_compile_definitions(Boost::system)
 
 target_link_libraries(
   coal

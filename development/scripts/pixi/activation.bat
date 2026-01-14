@@ -1,6 +1,3 @@
-:: Find Python executable path for nanobind and Boost.Python
-for /f "tokens=*" %%i in ('python -c "import sys; print(sys.executable)"') do set PYTHON_EXECUTABLE=%%i
-
 :: Set default build value only if not previously set
 if not defined COAL_BUILD_TYPE (set COAL_BUILD_TYPE=Release)
 if not defined COAL_PYTHON_STUBS (set COAL_PYTHON_STUBS=ON)

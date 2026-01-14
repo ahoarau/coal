@@ -27,9 +27,6 @@ fi
 # Without -isystem, some LSP can't find headers
 export COAL_CXX_FLAGS="$CXXFLAGS -isystem $CONDA_PREFIX/include"
 
-# Set Python interpreter path for nanobind
-export PYTHON_EXECUTABLE=$(which python)
-
 # Set default build value only if not previously set
 export COAL_BUILD_TYPE=${COAL_BUILD_TYPE:=Release}
 export COAL_PYTHON_STUBS=${COAL_PYTHON_STUBS:=ON}

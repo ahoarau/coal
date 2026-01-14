@@ -199,10 +199,7 @@ endfunction()
 # clear_interface_compile_definitions(Boost::serialization)
 # clear_interface_compile_definitions(Boost::system)
 
-set_property(
-  TARGET Boost::serialization
-  PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_SERIALIZATION_DYN_LINK
-)
+set_property(TARGET Boost::serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 
 if(TARGET Boost::log)
   set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)

@@ -201,16 +201,16 @@ endfunction()
 
 set_property(TARGET Boost::serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 
-if(TARGET Boost::log)
-  set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)
-endif()
+# if(TARGET Boost::log)
+#   set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)
+# endif()
 
-if(TARGET Boost::unit_test_framework)
-  set_property(
-    TARGET Boost::unit_test_framework
-    PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-  )
-endif()
+# if(TARGET Boost::unit_test_framework)
+#   set_property(
+#     TARGET Boost::unit_test_framework
+#     PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+#   )
+# endif()
 
 target_link_libraries(
   coal

@@ -42,7 +42,7 @@
 
 #include <limits>
 
-#if COAL_HAVE_OCTOMAP
+#if COAL_HAS_OCTOMAP
 #include "coal/octree.h"
 #endif
 
@@ -54,7 +54,7 @@ namespace detail {
 
 namespace dynamic_AABB_tree {
 
-#if COAL_HAVE_OCTOMAP
+#if COAL_HAS_OCTOMAP
 
 //==============================================================================
 template <typename Derived>

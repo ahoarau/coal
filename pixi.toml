@@ -217,13 +217,13 @@ typing_extensions = ">=4.13.2"
 # Use clang-cl on Windows
 # If something go wrong, we can check this repository:
 # https://github.com/conda-forge/clang-win-activation-feedstock/tree/main
-[feature.clang-cl]
-platforms = ["win-64"]
-dependencies = { clangxx = "*", lld = "*" }
-# Absolute path is needed to avoid using system clang-cl
-[feature.clang-cl.activation.env]
-CC = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
-CXX = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
+# [feature.clang-cl]
+# platforms = ["win-64"]
+# dependencies = { clangxx = "*", lld = "*" }
+# # Absolute path is needed to avoid using system clang-cl
+# [feature.clang-cl.activation.env]
+# CC = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
+# CXX = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
 
 [feature.clang]
 platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
@@ -277,13 +277,13 @@ all-clang = { features = [
   "clang",
   "python-latest",
 ], solve-group = "python-latest" }
-all-clang-cl = { features = [
-  "logging",
-  "qhull",
-  "octomap",
-  "clang-cl",
-  "python-latest",
-], solve-group = "python-latest" }
+# all-clang-cl = { features = [
+#   "logging",
+#   "qhull",
+#   "octomap",
+#   "clang-cl",
+#   "python-latest",
+# ], solve-group = "python-latest" }
 # Release a new software version
 new-version = { features = [
   "logging",

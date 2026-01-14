@@ -190,14 +190,19 @@ function(clear_interface_compile_definitions target)
   set_property(TARGET ${target} PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 endfunction()
 
-clear_interface_compile_definitions(Boost::atomic)
-clear_interface_compile_definitions(Boost::thread)
-clear_interface_compile_definitions(Boost::unit_test_framework)
-clear_interface_compile_definitions(Boost::chrono)
-clear_interface_compile_definitions(Boost::filesystem)
-clear_interface_compile_definitions(Boost::log)
-clear_interface_compile_definitions(Boost::serialization)
-clear_interface_compile_definitions(Boost::system)
+# clear_interface_compile_definitions(Boost::atomic)
+# clear_interface_compile_definitions(Boost::thread)
+# clear_interface_compile_definitions(Boost::unit_test_framework)
+# clear_interface_compile_definitions(Boost::chrono)
+# clear_interface_compile_definitions(Boost::filesystem)
+# clear_interface_compile_definitions(Boost::log)
+# clear_interface_compile_definitions(Boost::serialization)
+# clear_interface_compile_definitions(Boost::system)
+
+set_property(
+  TARGET Boost::serialization
+  PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_SERIALIZATION_DYN_LINK
+)
 
 if(TARGET Boost::log)
   set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)
@@ -214,7 +219,6 @@ target_link_libraries(
   coal
   PUBLIC
     Eigen3::Eigen
-    # Boost::disable_autolink
     Boost::serialization
     Boost::filesystem
     assimp::assimp

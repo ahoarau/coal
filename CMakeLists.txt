@@ -187,7 +187,7 @@ set_property(TARGET Boost::thread PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 set_property(TARGET Boost::unit_test_framework PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 set_property(TARGET Boost::chrono PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 set_property(TARGET Boost::filesystem PROPERTY INTERFACE_COMPILE_DEFINITIONS)
-set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)
+set_property(TARGET Boost::log PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 set_property(TARGET Boost::serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 set_property(TARGET Boost::system PROPERTY INTERFACE_COMPILE_DEFINITIONS)
 
@@ -195,7 +195,7 @@ target_link_libraries(
   coal
   PUBLIC
     Eigen3::Eigen
-    Boost::disable_autolinking
+    # Boost::disable_autolink
     Boost::serialization
     Boost::filesystem
     assimp::assimp

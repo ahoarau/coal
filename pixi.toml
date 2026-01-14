@@ -216,11 +216,10 @@ typing_extensions = ">=4.13.2"
 [feature.clang-cl]
 platforms = ["win-64"]
 dependencies = { clangxx = "*", lld = "*" }
-
 # Absolute path is needed to avoid using system clang-cl
 [feature.clang-cl.activation.env]
-CC = "%CONDA_PREFIX%/Library/bin/clang-cl"
-CXX = "%CONDA_PREFIX%/Library/bin/clang-cl"
+CC = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
+CXX = "%CONDA_PREFIX%/Library/bin/clang-cl.exe"
 
 [feature.clang]
 platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]

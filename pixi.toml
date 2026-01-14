@@ -198,9 +198,13 @@ activation = { env = { COAL_BUILD_WITH_OCTOMAP = "ON" } }
 activation = { env = { COAL_BUILD_WITH_LOGGING = "ON" } }
 
 # Tracy support
-[feature.tracy]
-dependencies = { tracy-profiler = ">=0.7.7" }
-activation = { env = { COAL_BUILD_WITH_TRACY = "ON" } }
+# FIXME: on CI, the build might fail with:
+# Tracy Profiler initialization failure: CPU doesn't support invariant TSC.
+# Define TRACY_NO_INVARIANT_CHECK=1 to ignore this error, *if you know what you are doing*.
+# Alternatively you may rebuild the application with the TRACY_TIMER_FALLBACK define to use lower resolution timer.
+# [feature.tracy]
+# dependencies = { tracy-profiler = ">=0.7.7" }
+# activation = { env = { COAL_BUILD_WITH_TRACY = "ON" } }
 
 [feature.python-latest.dependencies]
 python = "3.14.*"

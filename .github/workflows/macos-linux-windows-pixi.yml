@@ -76,13 +76,13 @@ jobs:
 
     - uses: actions/cache@v5
       with:
-        path: .ccache
-        key: ccache-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.cxx_options }}-${{ matrix.environment }}-${{ github.sha }}
-        restore-keys: ccache-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.cxx_options }}-${{ matrix.environment }}-
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.environment }}-${{ github.sha }}
+        restore-keys: ccache-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.environment }}-
 
-    - uses: prefix-dev/setup-pixi@v0.9.3
+    - name: Install Pixi Latest
+      uses: prefix-dev/setup-pixi@v0.9.3
       with:
-        cache: true
         environments: ${{ matrix.environment }}
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
@@ -135,7 +135,6 @@ jobs:
 
     - uses: prefix-dev/setup-pixi@v0.9.3
       with:
-        cache: true
         environments: ${{ matrix.environment }}
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
@@ -186,7 +185,6 @@ jobs:
       env:
         CMAKE_BUILD_PARALLEL_LEVEL: 2
       with:
-        cache: true
         environments: test-pixi-build
 
     - name: Test package [MacOS/Linux/Windows]

@@ -2,8 +2,6 @@ name: CI - MacOS/Linux/Windows via Pixi
 
 on:
   push:
-    branches:
-      - devel
     paths-ignore:
       - .gitlab-ci.yml
       - .gitignore

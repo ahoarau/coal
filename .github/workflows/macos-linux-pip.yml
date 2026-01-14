@@ -2,8 +2,6 @@ name: CI - MacOS/Linux via pip
 
 on:
   push:
-    branches:
-      - devel
     paths-ignore:
       - .gitlab-ci.yml
       - .gitignore

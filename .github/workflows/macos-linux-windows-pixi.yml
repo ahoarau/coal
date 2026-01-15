@@ -37,12 +37,13 @@ jobs:
       # Since pixi will install a compiler, the compiler mtime will be changed.
       # This can invalidate the cache (https://ccache.dev/manual/latest.html#config_compiler_check)
       CCACHE_COMPILERCHECK: content
-
+      # Tracy Support on CI (https://docs.cvedia.com/support/tracy_profiler.html)
+      TRACY_NO_INVARIANT_CHECK: 1
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, macos-15-intel]
-        environment: [all, all-python-oldest, all-boost-python, all-clang]
+        environment: [all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
         cxx_options: ['', '-mavx2']
         exclude:

@@ -30,8 +30,8 @@ jobs:
     name: Standard - ${{ matrix.os }} - Env ${{ matrix.environment }} ${{ matrix.build_type }} ${{ matrix.cxx_options }}
     runs-on: ${{ matrix.os }}
     env:
-      CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
-      CCACHE_DIR: "${GITHUB_WORKSPACE}/.ccache"
+      CCACHE_BASEDIR: ${{ github.workspace}}
+      CCACHE_DIR: ${{ github.workspace}}/.ccache
       CCACHE_COMPRESS: true
       CCACHE_COMPRESSLEVEL: 6
       # Since pixi will install a compiler, the compiler mtime will be changed.
@@ -78,9 +78,9 @@ jobs:
 
     - uses: actions/cache@v5
       with:
-        path: .ccache
-        key: ccache-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.cxx_options }}-${{ matrix.environment }}-${{ github.sha }}
-        restore-keys: ccache-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.cxx_options }}-${{ matrix.environment }}-
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache-coal-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.environment }}-${{ matrix.cxx_options }}-${{ github.sha }}
+        restore-keys: ccache-coal-pixi-${{ matrix.os }}-${{ matrix.build_type }}-${{ matrix.environment }}-${{ matrix.cxx_options }}-
 
     - uses: prefix-dev/setup-pixi@v0.9.3
       with:
@@ -112,8 +112,8 @@ jobs:
     name: Python standalone - ${{ matrix.os }} - Env ${{ matrix.environment }}
     runs-on: ${{ matrix.os }}
     env:
-      CCACHE_BASEDIR: "${GITHUB_WORKSPACE}"
-      CCACHE_DIR: "${GITHUB_WORKSPACE}/.ccache"
+      CCACHE_BASEDIR: ${{ github.workspace}}
+      CCACHE_DIR: ${{ github.workspace}}/.ccache
       CCACHE_COMPRESS: true
       CCACHE_COMPRESSLEVEL: 6
       # Since pixi will install a compiler, the compiler mtime will be changed.
@@ -131,9 +131,9 @@ jobs:
 
     - uses: actions/cache@v5
       with:
-        path: .ccache
-        key: ccache-python-standalone-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.environment }}-${{ github.sha }}
-        restore-keys: ccache-python-standalone-macos-linux-windows-pixi-${{ matrix.os }}-${{ matrix.environment }}-
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache-coal-python-standalone-pixi-${{ matrix.os }}-${{ matrix.environment }}-${{ github.sha }}
+        restore-keys: ccache-coal-python-standalone-pixi-${{ matrix.os }}-${{ matrix.environment }}-
 
     - uses: prefix-dev/setup-pixi@v0.9.3
       with:

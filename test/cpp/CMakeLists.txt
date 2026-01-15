@@ -2,7 +2,7 @@ function(coal_add_test test_name)
   add_executable(coal-test-${test_name} ${test_name}.cpp)
   target_link_libraries(
     coal-test-${test_name}
-    PRIVATE Boost::filesystem Boost::unit_test_framework coal-tests-utility coal-tests-resources
+    PRIVATE Boost::unit_test_framework coal-tests-utility coal-tests-resources
   )
   jrl_target_enforce_msvc_conformance(coal-test-${test_name} PRIVATE)
 

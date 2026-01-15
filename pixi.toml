@@ -215,21 +215,24 @@ typing_extensions = ">=4.13.2"
 # Use clang-cl on Windows
 # If something go wrong, we can check this repository:
 # https://github.com/conda-forge/clang-win-activation-feedstock/tree/main
-# coal-octree test is crashing on Windows when building with clang > 22.1
 [feature.clang-cl]
 platforms = ["win-64"]
-dependencies = { clangxx = "<22.1", lld = "*" }
+dependencies = { clangxx = "*", lld = "*" }
 
 # Absolute path is needed to avoid using system clang-cl
 [feature.clang-cl.activation.env]
 CC = "%CONDA_PREFIX%/Library/bin/clang-cl"
 CXX = "%CONDA_PREFIX%/Library/bin/clang-cl"
 
-# Use clang on GNU/Linux
+# Use clang on Windows/Linux/macOS
 [feature.clang]
-platforms = ["linux-64"]
 activation = { env = { CC = "clang", CXX = "clang++" } }
-dependencies = { clangxx = "*" }
+dependencies = { clangxx = "*", lld = "*" }
+
+# NOTE: llvm-tools is only needed on windows to have llvm-ar (CMAKE_AR)
+# On linux, macOS clang++ provide "ar"
+[feature.clang.target.win-64.dependencies]
+llvm-tools = "*"
 
 # [feature.test-pixi-build]
 # dependencies = { coal = { path = "." }, cmake = ">=3.22", python = "*" }
@@ -276,6 +279,13 @@ all-python-oldest = { features = [
   "octomap",
   "python-oldest",
 ], solve-group = "python-oldest" }
+all-clang = { features = [
+  "logging",
+  "qhull",
+  "octomap",
+  "clang",
+  "python-latest",
+], solve-group = "python-latest" }
 all-clang-cl = { features = [
   "logging",
   "qhull",

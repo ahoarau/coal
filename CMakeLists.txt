@@ -180,6 +180,15 @@ target_compile_definitions(
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:COAL_TRACY_ENABLE>
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:COAL_ENABLE_LOGGING>
 )
+
+# For some reason, we need to remove the BOOST_SERIALIZATION_DYN_LINK
+# compile definition on Windows with Clang, or there will be linking issues.
+# Ref: https://github.com/boostorg/boost_install/issues/79
+# To reproduce: https://github.com/ahoarau/boost-serialization-clang-cl
+if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  set_property(TARGET Boost::serialization PROPERTY INTERFACE_COMPILE_DEFINITIONS)
+endif()
+
 target_link_libraries(
   coal
   PUBLIC

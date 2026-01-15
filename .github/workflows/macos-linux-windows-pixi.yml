@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   coal-pixi:
-    name: Pixi - ${{ matrix.os }} - Env ${{ matrix.environment }} - ${{ matrix.build_type }} [${{ matrix.cxx_options }}]
+    name: Pixi - ${{ matrix.os }} - Env ${{ matrix.environment }} - ${{ matrix.build_type }} ${{ matrix.cxx_options }}
     runs-on: ${{ matrix.os }}
     env:
       CCACHE_BASEDIR: ${{ github.workspace}}
@@ -90,7 +90,7 @@ jobs:
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
       run: |
-        pixi run -e ${{ matrix.environment }} ccache -z
+        pixi run -e ${{ matrix.environment }} ccache -svz
 
     - name: Build Coal [MacOS/Linux/Windows]
       env:
@@ -147,7 +147,7 @@ jobs:
 
     - name: Clear ccache statistics [MacOS/Linux/Windows]
       run: |
-        pixi run -e ${{ matrix.environment }} ccache -z
+        pixi run -e ${{ matrix.environment }} ccache -svz
 
     - name: Build Coal cpp [MacOS/Linux/Windows]
       env:

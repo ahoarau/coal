@@ -47,7 +47,7 @@ coal_add_test(gjk)
 coal_add_test(accelerated_gjk)
 coal_add_test(gjk_convergence_criterion)
 
-if(COAL_HAS_OCTOMAP)
+if(COAL_BUILD_WITH_OCTOMAP)
   coal_add_test(octree)
 endif()
 

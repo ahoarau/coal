@@ -1,4 +1,4 @@
-name: CI - MacOS/Linux/Windows via Pixi
+name: CI - Pixi - MacOS/Linux/Windows
 
 on:
   push:
@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   coal-pixi:
-    name: Standard - ${{ matrix.os }} - Env ${{ matrix.environment }} ${{ matrix.build_type }} ${{ matrix.cxx_options }}
+    name: Pixi - ${{ matrix.os }} - Env ${{ matrix.environment }} - ${{ matrix.build_type }} [${{ matrix.cxx_options }}]
     runs-on: ${{ matrix.os }}
     env:
       CCACHE_BASEDIR: ${{ github.workspace}}
@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, macos-15-intel]
-        environment: [all, all-python-oldest, all-boost-python, all-clang, all-tracy]
+        environment: [default, all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
         cxx_options: ['', '-mavx2']
         exclude:
@@ -100,10 +100,14 @@ jobs:
       run: |
         pixi run -e ${{ matrix.environment }} build
 
+    - name: Install Coal [MacOS/Linux/Windows]
+      run: |
+        pixi run -e ${{ matrix.environment }} install
+
     - name: Test Coal [MacOS/Linux/Windows]
       if: ${{ ! (contains(matrix.os, 'windows') && matrix.build_type == 'Debug') }}
       run: |
-        pixi run -e ${{ matrix.environment }} ctest --test-dir build --output-on-failure
+        pixi run -e ${{ matrix.environment }} test
 
     - name: Show ccache statistics [MacOS/Linux/Windows]
       run: |

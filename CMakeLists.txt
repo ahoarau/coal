@@ -199,6 +199,7 @@ target_link_libraries(
     $<$<BOOL:${COAL_BUILD_WITH_LOGGING}>:Boost::log>
     $<$<BOOL:${COAL_BUILD_WITH_OCTOMAP}>:octomap>
     $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhullcpp>
+    $<$<BOOL:${COAL_BUILD_WITH_QHULL}>:Qhull::qhull_r>
     $<$<BOOL:${COAL_BUILD_WITH_TRACY}>:Tracy::TracyClient>
 )
 

@@ -26,7 +26,6 @@ doxygen = ">=1.13.2,<2"
 lxml = ">=5.3"
 pylatexenc = ">=2.10"
 nanoeigenpy = ">=0.3.0"
-tracy-profiler = ">=0.7.7"
 assimp = ">=5.4"
 graphviz = ">=13.1.2,<14"
 
@@ -200,6 +199,11 @@ activation = { env = { COAL_BUILD_WITH_OCTOMAP = "ON" } }
 [feature.logging]
 activation = { env = { COAL_BUILD_WITH_LOGGING = "ON" } }
 
+# Tracy support
+[feature.tracy]
+dependencies = { tracy-profiler = ">=0.7.7" }
+activation = { env = { COAL_BUILD_WITH_TRACY = "ON" } }
+
 [feature.python-latest.dependencies]
 python = "3.14.*"
 
@@ -247,6 +251,13 @@ octomap = { features = [
 python-oldest = { features = ["python-oldest"], solve-group = "python-oldest" }
 all = { features = [
   "logging",
+  "qhull",
+  "octomap",
+  "python-latest",
+], solve-group = "python-latest" }
+all-tracy = { features = [
+  "logging",
+  "tracy",
   "qhull",
   "octomap",
   "python-latest",

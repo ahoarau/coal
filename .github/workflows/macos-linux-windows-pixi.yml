@@ -48,6 +48,7 @@ jobs:
         include:
           # Define the variable for CMAKE_CXX_FLAGS
           - cxx_options: ''
+          - run_tests: true
 
           # Disable tests for tracy builds.
           # FIXME: the coal-test-frontlist might crash on the CI
@@ -120,7 +121,7 @@ jobs:
         pixi run -e ${{ matrix.environment }} install
 
     - name: Test Coal [MacOS/Linux/Windows]
-      if: ${{ matrix.run_tests != 'false' }}
+      if: matrix.run_tests == true
       run: |
         pixi run -e ${{ matrix.environment }} test
 

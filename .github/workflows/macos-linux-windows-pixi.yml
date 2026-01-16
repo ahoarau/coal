@@ -2,8 +2,8 @@ name: CI - Pixi - MacOS/Linux/Windows
 
 on:
   push:
-    branches:
-      - devel
+    # branches:
+    #   - devel
     paths-ignore:
       - .gitlab-ci.yml
       - .gitignore
@@ -42,37 +42,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-15-intel]
+        os: [ubuntu-22.04, ubuntu-24.04, macos-26, macos-15-intel, windows-2022]
         environment: [default, all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
-        cxx_options: ['', '-mavx2']
-        exclude:
-          - os: macos-latest
-            cxx_options: '-mavx2'
-          - os: macos-15-intel
-            cxx_options: '-mavx2'
 
         include:
-          - os: windows-latest
-            environment: all
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
-            environment: all-clang
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
-            environment: all-boost-python
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
+          # Don't
+          - environment: all-tracy
+            run_tests: false
+
+          - os: ubuntu-latest
+            cxx_options: ['-mavx2']
+
+          - os: windows-2022
             environment: all-clang-cl
-            cxx_options: ''
             build_type: Release
-          - os: windows-latest
-            environment: default
-            cxx_options: ''
-            build_type: Debug
 
     steps:
     - uses: actions/checkout@v6
@@ -105,7 +89,7 @@ jobs:
         pixi run -e ${{ matrix.environment }} install
 
     - name: Test Coal [MacOS/Linux/Windows]
-      if: ${{ ! (contains(matrix.os, 'windows') && matrix.build_type == 'Debug') }}
+      if: matrix.run_tests != 'false'
       run: |
         pixi run -e ${{ matrix.environment }} test
 

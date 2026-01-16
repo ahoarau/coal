@@ -39,15 +39,17 @@ jobs:
       CCACHE_COMPILERCHECK: content
       # Tracy Support on CI (https://docs.cvedia.com/support/tracy_profiler.html)
       TRACY_NO_INVARIANT_CHECK: 1
+
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04, macos-26, macos-15-intel, windows-2022]
         environment: [default, all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
-        cxx_options: ['', '-mavx2']
 
         include:
+          - cxx_options: ''
+
           - environment: all-tracy
             run_tests: false
 
@@ -56,24 +58,19 @@ jobs:
             build_type: Release
             cxx_options: ''
 
+          - os: ubuntu-22.04
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
+          - os: ubuntu-24.04
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
         exclude:
           - build_type: Debug
-            cxx_options: '-mavx2'
-
-          - build_type: Debug
             environment: all-tracy
-
-          - environment: all-tracy
-            cxx_options: '-mavx2'
-
-          - os: windows-2022
-            cxx_options: '-mavx2'
-
-          - os: macos-26
-            cxx_options: '-mavx2'
-
-          - os: macos-15-intel
-            cxx_options: '-mavx2'
 
     steps:
     - uses: actions/checkout@v6

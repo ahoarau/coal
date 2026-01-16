@@ -45,20 +45,26 @@ jobs:
         os: [ubuntu-22.04, ubuntu-24.04, macos-26, macos-15-intel, windows-2022]
         environment: [default, all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
-        cxx_options: ['']
-        run_tests: [true]
+        cxx_options: ['', '-mavx2']
 
         include:
-          # Don't
           - environment: all-tracy
             run_tests: false
-
-          - os: ubuntu-latest
-            cxx_options: ['-mavx2']
 
           - os: windows-2022
             environment: all-clang-cl
             build_type: Release
+            cxx_options: ''
+
+        exclude:
+          - os: windows-2022
+            cxx_options: ['-mavx2']
+
+          - os: macos-26
+            cxx_options: ['-mavx2']
+
+          - os: macos-15-intel
+            cxx_options: ['-mavx2']
 
     steps:
     - uses: actions/checkout@v6

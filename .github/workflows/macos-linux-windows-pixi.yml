@@ -212,8 +212,9 @@ jobs:
     needs:
     - coal-pixi
     - coal-python-standalone-pixi
+    - coal-pixi-build
 
-    runs-on: Ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Decide whether the needed jobs succeeded or failed

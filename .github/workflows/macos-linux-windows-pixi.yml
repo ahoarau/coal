@@ -37,8 +37,6 @@ jobs:
       # Since pixi will install a compiler, the compiler mtime will be changed.
       # This can invalidate the cache (https://ccache.dev/manual/latest.html#config_compiler_check)
       CCACHE_COMPILERCHECK: content
-      # Tracy Support on CI (https://docs.cvedia.com/support/tracy_profiler.html)
-      TRACY_NO_INVARIANT_CHECK: 1
 
     strategy:
       fail-fast: false
@@ -48,8 +46,12 @@ jobs:
         build_type: [Release, Debug]
 
         include:
+          # Define the variable for CMAKE_CXX_FLAGS
           - cxx_options: ''
 
+          # Disable tests for tracy builds.
+          # FIXME: the coal-test-frontlist might crash on the CI
+          # Event with the TRACY_NO_INVARIANT_CHECK=1 env var set.
           - environment: all-tracy
             run_tests: false
 
@@ -58,6 +60,7 @@ jobs:
             build_type: Release
             cxx_options: ''
 
+          # Enable builds with AVX2 optimizations
           - os: ubuntu-22.04
             environment: all
             build_type: Release
@@ -68,7 +71,18 @@ jobs:
             build_type: Release
             cxx_options: '-mavx2'
 
+          - os: macos-26
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
+          - os: macos-15-intel
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
         exclude:
+          # Do not run Debug tests with Tracy to reduce CI load
           - build_type: Debug
             environment: all-tracy
 

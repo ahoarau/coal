@@ -58,13 +58,13 @@ jobs:
 
         exclude:
           - os: windows-2022
-            cxx_options: ['-mavx2']
+            cxx_options: '-mavx2'
 
           - os: macos-26
-            cxx_options: ['-mavx2']
+            cxx_options: '-mavx2'
 
           - os: macos-15-intel
-            cxx_options: ['-mavx2']
+            cxx_options: '-mavx2'
 
     steps:
     - uses: actions/checkout@v6

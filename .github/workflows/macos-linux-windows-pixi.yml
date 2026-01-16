@@ -71,11 +71,6 @@ jobs:
             build_type: Release
             cxx_options: '-mavx2'
 
-          - os: macos-26
-            environment: all
-            build_type: Release
-            cxx_options: '-mavx2'
-
           - os: macos-15-intel
             environment: all
             build_type: Release

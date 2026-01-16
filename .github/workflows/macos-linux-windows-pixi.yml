@@ -60,6 +60,12 @@ jobs:
           - build_type: Debug
             cxx_options: '-mavx2'
 
+          - build_type: Debug
+            environment: all-tracy
+
+          - environment: all-tracy
+            cxx_options: '-mavx2'
+
           - os: windows-2022
             cxx_options: '-mavx2'
 

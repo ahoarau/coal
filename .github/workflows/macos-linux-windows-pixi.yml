@@ -55,10 +55,9 @@ jobs:
           - environment: all-tracy
             run_tests: false
 
+          # Test the legacy clang-cl compiler on Windows
           - os: windows-2022
             environment: all-clang-cl
-            build_type: Release
-            cxx_options: ''
 
           # Enable builds with AVX2 optimizations
           - os: ubuntu-22.04
@@ -85,6 +84,10 @@ jobs:
           # Do not run Debug tests with Tracy to reduce CI load
           - build_type: Debug
             environment: all-tracy
+
+          # Disable Debug builds on windows
+          - os: windows-2022
+            build_type: Debug
 
     steps:
     - uses: actions/checkout@v6

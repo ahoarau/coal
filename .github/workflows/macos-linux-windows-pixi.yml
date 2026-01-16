@@ -57,6 +57,9 @@ jobs:
             cxx_options: ''
 
         exclude:
+          - build_type: Debug
+            cxx_options: '-mavx2'
+
           - os: windows-2022
             cxx_options: '-mavx2'
 

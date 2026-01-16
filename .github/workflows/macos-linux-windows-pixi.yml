@@ -120,7 +120,7 @@ jobs:
         pixi run -e ${{ matrix.environment }} install
 
     - name: Test Coal [MacOS/Linux/Windows]
-      if: matrix.run_tests != 'false'
+      if: ${{ matrix.run_tests != 'false' }}
       run: |
         pixi run -e ${{ matrix.environment }} test
 

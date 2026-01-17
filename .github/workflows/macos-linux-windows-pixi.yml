@@ -37,41 +37,52 @@ jobs:
       # Since pixi will install a compiler, the compiler mtime will be changed.
       # This can invalidate the cache (https://ccache.dev/manual/latest.html#config_compiler_check)
       CCACHE_COMPILERCHECK: content
-      # Tracy Support on CI (https://docs.cvedia.com/support/tracy_profiler.html)
-      TRACY_NO_INVARIANT_CHECK: 1
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, macos-15-intel]
+        os: [ubuntu-22.04, ubuntu-24.04, macos-26, macos-15-intel, windows-2022]
         environment: [default, all, all-python-oldest, all-boost-python, all-clang, all-tracy]
         build_type: [Release, Debug]
-        cxx_options: ['', '-mavx2']
-        exclude:
-          - os: macos-latest
-            cxx_options: '-mavx2'
-          - os: macos-15-intel
-            cxx_options: '-mavx2'
 
         include:
-          - os: windows-latest
-            environment: all
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
-            environment: all-clang
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
-            environment: all-boost-python
-            cxx_options: ''
-            build_type: Release
-          - os: windows-latest
+          # Define the variable for CMAKE_CXX_FLAGS
+          - cxx_options: ''
+          - run_tests: true
+
+          # Disable tests for tracy builds.
+          # FIXME: the coal-test-frontlist might crash on the CI
+          # Event with the TRACY_NO_INVARIANT_CHECK=1 env var set.
+          - environment: all-tracy
+            run_tests: false
+
+          # Test the legacy clang-cl compiler on Windows
+          - os: windows-2022
             environment: all-clang-cl
-            cxx_options: ''
+
+          # Enable builds with AVX2 optimizations
+          - os: ubuntu-22.04
+            environment: all
             build_type: Release
-          - os: windows-latest
-            environment: default
-            cxx_options: ''
+            cxx_options: '-mavx2'
+
+          - os: ubuntu-24.04
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
+          - os: macos-15-intel
+            environment: all
+            build_type: Release
+            cxx_options: '-mavx2'
+
+        exclude:
+          # Do not run Debug tests with Tracy to reduce CI load
+          - build_type: Debug
+            environment: all-tracy
+
+          # Disable Debug builds on windows
+          - os: windows-2022
             build_type: Debug
 
     steps:
@@ -105,7 +116,7 @@ jobs:
         pixi run -e ${{ matrix.environment }} install
 
     - name: Test Coal [MacOS/Linux/Windows]
-      if: ${{ ! (contains(matrix.os, 'windows') && matrix.build_type == 'Debug') }}
+      if: matrix.run_tests == true
       run: |
         pixi run -e ${{ matrix.environment }} test
 
@@ -200,8 +211,9 @@ jobs:
     needs:
     - coal-pixi
     - coal-python-standalone-pixi
+    - coal-pixi-build
 
-    runs-on: Ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Decide whether the needed jobs succeeded or failed

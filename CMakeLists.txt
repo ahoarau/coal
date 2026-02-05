@@ -20,19 +20,19 @@ jrl_configure_defaults()
 # ----------------------------------------------------
 jrl_option(COAL_INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 jrl_option(COAL_INSTALL_HEADERS "Install the header files" ON)
-jrl_cmake_dependent_option(
+jrl_option(
   COAL_BUILD_DOCUMENTATION
   "Build the documentation"
   OFF
-  COAL_INSTALL_DOCUMENTATION
-  OFF
+  CONDITION COAL_INSTALL_DOCUMENTATION
+  FALLBACK OFF
 )
-jrl_cmake_dependent_option(
+jrl_option(
   ENABLE_PYTHON_DOXYGEN_AUTODOC
   "Enable automatic documentation of Python bindings from Doxygen documentation"
   ON
-  COAL_BUILD_DOCUMENTATION
-  OFF
+  CONDITION COAL_BUILD_DOCUMENTATION
+  FALLBACK OFF
 )
 jrl_option(COAL_BUILD_TESTS "Build the tests" ON)
 jrl_option(COAL_BUILD_BENCHMARKS "Build the benchmarks" ON)
@@ -79,20 +79,20 @@ jrl_option(
   OFF
 )
 
-jrl_cmake_dependent_option(
+jrl_option(
   COAL_PYTHON_NANOBIND
   "Build the nanobind-based bindings."
   OFF
-  BUILD_PYTHON_INTERFACE
-  OFF
+  CONDITION BUILD_PYTHON_INTERFACE
+  FALLBACK OFF
 )
 
-jrl_cmake_dependent_option(
+jrl_option(
   GENERATE_PYTHON_STUBS
   "Generate the Python stubs for the Python bindings"
   ON
-  BUILD_PYTHON_INTERFACE
-  OFF
+  CONDITION BUILD_PYTHON_INTERFACE
+  FALLBACK OFF
 )
 
 # ----------------------------------------------------

@@ -51,7 +51,6 @@ jobs:
             os: Ubuntu 24.04 (Noble)
     env:
       CMAKE_ARGS: -DBUILD_PYTHON_INTERFACE=ON -DCOAL_BUILD_TESTS=ON -DCOAL_BUILD_BENCHMARKS=ON
-      PRERELEASE: true
       VERBOSE_OUTPUT: true
       VERBOSE_TESTS: true
       ROS_DISTRO: ${{ matrix.ROS_DISTRO }}

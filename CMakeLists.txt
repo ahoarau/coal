@@ -126,12 +126,12 @@ if(COAL_BUILD_TESTS)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND COAL_PYTHON_NANOBIND)
-  jrl_find_python(3.8 REQUIRED COMPONENTS Interpreter Development.Module)
-  jrl_find_nanobind(CONFIG REQUIRED)
+  jrl_find_python(3.10 REQUIRED COMPONENTS Interpreter Development.Module)
+  jrl_find_nanobind(2.5.0 CONFIG REQUIRED)
 endif()
 
 if(BUILD_PYTHON_INTERFACE AND NOT COAL_PYTHON_NANOBIND)
-  jrl_find_python(3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+  jrl_find_python(3.10 REQUIRED COMPONENTS Interpreter Development.Module)
   jrl_find_package(Boost CONFIG REQUIRED COMPONENTS python)
 endif()
 

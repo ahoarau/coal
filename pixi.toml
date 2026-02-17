@@ -235,10 +235,10 @@ dependencies = { clangxx = "*", lld = "*" }
 llvm-tools = "*"
 
 # [feature.test-pixi-build]
-# dependencies = { coal = { path = "." }, cmake = ">=3.22", python = "*" }
+# dependencies = { coal = { path = "." }, cmake = ">=3.22", python = "*", cxx-compiler = ">=1.7.0" }
 
 # [feature.test-pixi-build.tasks]
-# test-cmake = "cmake -S test/pixi_build -B build_test_pixi_build"
+# test-cmake = "cmake -S test/pixi_build -B build/test_pixi_build"
 # test-python = "python -c 'import coal; print(coal.__version__)'"
 # test = { depends-on = ["test-cmake", "test-python"] }
 

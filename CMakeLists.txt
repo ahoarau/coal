@@ -209,8 +209,7 @@ target_include_directories(
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
-set_target_properties(coal PROPERTIES VERSION ${PROJECT_VERSION})
-jrl_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh)
+jrl_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh VERSION ${PROJECT_VERSION})
 jrl_target_generate_warning_header(coal PUBLIC FILENAME coal/warning.hh)
 jrl_target_generate_deprecated_header(coal PUBLIC FILENAME coal/deprecated.hh)
 jrl_target_generate_tracy_header(coal PUBLIC FILENAME coal/tracy.hh)

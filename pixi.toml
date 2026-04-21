@@ -226,9 +226,10 @@ CC = "%CONDA_PREFIX%/Library/bin/clang-cl"
 CXX = "%CONDA_PREFIX%/Library/bin/clang-cl"
 
 # Use clang on Windows/Linux/macOS
+# coal-octree test is crashing on Windows when building with clang > 22.1
 [feature.clang]
 activation = { env = { CC = "clang", CXX = "clang++" } }
-dependencies = { clangxx = "*", lld = "*" }
+dependencies = { clangxx = "<22.1", lld = "*" }
 
 # NOTE: llvm-tools is only needed on windows to have llvm-ar (CMAKE_AR)
 # On linux, macOS clang++ provide "ar"

@@ -58,3 +58,7 @@ coal_add_test(broadphase)
 coal_add_test(broadphase_dynamic_AABB_tree)
 coal_add_test(broadphase_collision_1)
 coal_add_test(broadphase_collision_2)
+
+coal_add_test(alloca)
+coal_add_test(patch_simplifier)
+coal_add_test(polygon_convex_hull)

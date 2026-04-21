@@ -209,6 +209,19 @@ target_include_directories(
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
+
+# boost::span requires Boost >= 1.78.0.
+# On Ubuntu 22.04 the system Boost is 1.74 and is too old.
+# In this case, we add include/coal/third_party as include directory.
+if(Boost_VERSION VERSION_LESS 1.78)
+  target_include_directories(
+    coal
+    PUBLIC
+      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/coal/third_party>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/coal/third_party>
+  )
+endif()
+
 jrl_target_generate_config_header(coal PUBLIC FILENAME coal/config.hh VERSION ${PROJECT_VERSION})
 jrl_target_generate_warning_header(coal PUBLIC FILENAME coal/warning.hh)
 jrl_target_generate_deprecated_header(coal PUBLIC FILENAME coal/deprecated.hh)
@@ -221,6 +234,7 @@ target_sources(
     src/contact_patch.cpp
     src/contact_patch/contact_patch_solver.cpp
     src/contact_patch/contact_patch_simplifier.cpp
+    src/contact_patch/polygon_convex_hull.cpp
     src/contact_patch_func_matrix.cpp
     src/distance_func_matrix.cpp
     src/collision_data.cpp
@@ -362,6 +376,7 @@ jrl_target_headers(coal PUBLIC
     include/coal/contact_patch/contact_patch_solver.h
     include/coal/contact_patch/contact_patch_solver.hxx
     include/coal/contact_patch/contact_patch_simplifier.h
+    include/coal/contact_patch/polygon_convex_hull.h
     include/coal/distance.h
     include/coal/math/matrix_3f.h
     include/coal/math/vec_3f.h
@@ -418,8 +433,23 @@ jrl_target_headers(coal PUBLIC
     include/coal/serialization/quadrilateral.h
     include/coal/serialization/triangle.h
     include/coal/timings.h
+    include/coal/alloca.h
   BASE_DIRS include
 )
+# boost::span requires Boost >= 1.78.0.
+# On Ubuntu 22.04 the system Boost is 1.74 and is too old.
+# We must install boost/core/span headers.
+if(Boost_VERSION VERSION_LESS 1.78)
+  message(STATUS "Boost <= 1.78 detected: boost::span headers will be installed")
+  jrl_target_headers(coal PUBLIC
+    HEADERS
+    include/coal/third_party/boost/core/data.hpp
+    include/coal/third_party/boost/core/detail/assert.hpp
+    include/coal/third_party/boost/core/make_span.hpp
+    include/coal/third_party/boost/core/span.hpp
+    BASE_DIRS include
+  )
+endif()
 
 if(COAL_BUILD_WITH_OCTOMAP)
   jrl_target_headers(coal PUBLIC
